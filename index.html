@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dromus Bed &amp; Boetiek</title>
+  <link rel="stylesheet" href="dist/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* ── Photo-slider ── */
+    .slide { transition: opacity 0.8s ease; }
+
+    /* ── Room gallery grid ── */
+    .gallery-img { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+    .gallery-img:hover { transform: scale(1.03); box-shadow: 0 20px 40px rgba(0,0,0,.18); }
+
+    /* ── Review cards ── */
+    .review-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .review-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.10); }
+
+    /* ── Form inputs ── */
+    .form-input:focus { outline: none; border-color: #b5607a; box-shadow: 0 0 0 3px rgba(181,96,122,.20); }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased">
+
+  <!-- ═══════════════════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 py-5 px-6 lg:px-12 flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-3 font-serif text-xl font-semibold text-white tracking-wide drop-shadow" style="font-family:'Nunito',sans-serif;">
+      <img src="img/dromus-logo.jpg" alt="DROMUS logo" class="w-10 h-10 rounded-full object-cover border border-white/40 shadow-md" />
+      <span>Dromus Bed &amp; Boetiek</span>
+    </a>
+    <!-- Desktop links -->
+    <ul class="hidden md:flex gap-8 text-sm font-medium text-white/90 drop-shadow">
+      <li><a href="#room"        class="hover:text-white transition-colors">De Kamer</a></li>
+      <li><a href="#reviews"     class="hover:text-white transition-colors">Reviews</a></li>
+      <li><a href="#reservation" class="hover:text-white transition-colors">Reserveren</a></li>
+    </ul>
+    <!-- Mobile hamburger -->
+    <button id="menuBtn" class="md:hidden text-white focus:outline-none" aria-label="Menu openen">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path id="menuIconOpen"  stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        <path id="menuIconClose" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" class="hidden"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden fixed inset-0 z-40 bg-stone-900/95 flex flex-col items-center justify-center gap-10 text-2xl font-medium text-white">
+    <a href="#room"        class="hover:text-sand transition-colors" onclick="closeMobileMenu()">De Kamer</a>
+    <a href="#reviews"     class="hover:text-sand transition-colors" onclick="closeMobileMenu()">Reviews</a>
+    <a href="#reservation" class="hover:text-sand transition-colors" onclick="closeMobileMenu()">Reserveren</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO / PHOTO SLIDER
+  ════════════════════════════════════════════════ -->
+  <section id="home" class="relative w-full h-screen overflow-hidden">
+
+    <!-- Slides -->
+    <div id="slider" class="absolute inset-0">
+      <div class="slide absolute inset-0 opacity-100" style="background: url('https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1600&q=80') center/cover no-repeat;"></div>
+      <div class="slide absolute inset-0 opacity-0"   style="background: url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80') center/cover no-repeat;"></div>
+      <div class="slide absolute inset-0 opacity-0"   style="background: url('https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=80') center/cover no-repeat;"></div>
+      <div class="slide absolute inset-0 opacity-0"   style="background: url('https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1600&q=80') center/cover no-repeat;"></div>
+    </div>
+
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60"></div>
+
+    <!-- Hero text -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+      <img src="img/dromus-logo.jpg" alt="DROMUS Bed &amp; Boetiek logo" class="hidden xl:block w-[7.5rem] h-[7.5rem] md:w-[9rem] md:h-[9rem] rounded-full object-cover border-[3px] border-white/75 shadow-2xl mb-5" />
+      <p class="text-sand-light uppercase tracking-widest text-sm mb-3 font-medium">Welkom bij</p>
+      <h1 class="font-serif text-5xl md:text-7xl text-white font-semibold leading-tight mb-2">
+        Dromus
+      </h1>
+      <p class="text-white/90 text-3xl md:text-4xl mb-6" style="font-family:'Deluxxe Chauncy',cursive; font-weight:600;">Bed &amp; Boetiek</p>
+      <p class="text-white/80 text-lg md:text-xl max-w-xl mb-10 font-light">
+        Geniet van een unieke verblijfservaring in ons stijlvol ingerichte gastenkamer, midden in het hart van de stad.
+      </p>
+      <a href="#room"
+         class="inline-block bg-olive text-white px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-lg">
+        Ontdek de kamer
+      </a>
+    </div>
+
+    <!-- Slider controls -->
+    <button id="prevBtn" onclick="changeSlide(-1)"
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-sm transition-colors"
+            aria-label="Vorige">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button id="nextBtn" onclick="changeSlide(1)"
+            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-sm transition-colors"
+            aria-label="Volgende">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+
+    <!-- Slide dots -->
+    <div id="dots" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2"></div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 right-6 z-20 text-white/50 text-xs tracking-widest uppercase hidden md:block">Scroll</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       ROOM INFO & PHOTOS
+  ════════════════════════════════════════════════ -->
+  <section id="room" class="py-24 px-6 lg:px-20 bg-sand-light">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="text-center mb-16">
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Uw verblijf</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">De Gastenkamer</h2>
+        <div class="w-16 h-0.5 bg-sand mx-auto"></div>
+      </div>
+
+      <!-- Info + main photo -->
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+        <div>
+          <h3 class="font-serif text-2xl md:text-3xl text-stone-700 mb-5 italic">"Een thuis weg van huis"</h3>
+          <p class="text-stone-600 leading-relaxed mb-5">
+            Onze ruime, lichtrijke gastenkamer combineert hedendaags comfort met een warme, gezellige sfeer. Gelegen op de bovenverdieping van onze boetiek, biedt de kamer een unieke mix van rust en stadsbeleving.
+          </p>
+          <p class="text-stone-600 leading-relaxed mb-8">
+            Ontwaak met een heerlijk ontbijt, verken de lokale winkeltjes vlak om de hoek, of ontspan gewoon in uw eigen privéoase.
+          </p>
+          <!-- Amenities -->
+          <ul class="grid grid-cols-2 gap-3 text-sm text-stone-700">
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Kingsize bed
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Privébadkamer
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Gratis WiFi
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Ontbijt inbegrepen
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Airconditioning
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Smart TV
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Zithoek
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-olive/20 flex items-center justify-center text-olive text-xs">✓</span> Stadsview
+            </li>
+          </ul>
+        </div>
+        <div>
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80"
+               alt="Gastenkamer overzicht"
+               class="gallery-img w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl cursor-pointer" />
+        </div>
+      </div>
+
+      <!-- Photo gallery row -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=700&q=80"
+             alt="Slaapkamer detail"
+             class="gallery-img w-full h-48 md:h-60 object-cover rounded-xl shadow-md cursor-pointer" />
+        <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=700&q=80"
+             alt="Badkamer"
+             class="gallery-img w-full h-48 md:h-60 object-cover rounded-xl shadow-md cursor-pointer" />
+        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&q=80"
+             alt="Zithoek"
+             class="gallery-img w-full h-48 md:h-60 object-cover rounded-xl shadow-md cursor-pointer col-span-2 md:col-span-1" />
+      </div>
+
+      <!-- Price banner -->
+      <div class="mt-14 bg-olive text-white rounded-2xl py-10 px-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+        <div>
+          <p class="text-white/70 text-sm uppercase tracking-widest mb-1">Vanaf</p>
+          <p class="font-serif text-4xl font-semibold">€ 170 <span class="text-xl font-light">/ nacht</span></p>
+          <p class="text-white/70 text-sm mt-1">Inclusief belastingen</p>
+        </div>
+        <a href="#reservation"
+           class="bg-white text-olive px-8 py-3 rounded-full font-semibold text-sm uppercase tracking-wider hover:bg-sand-light transition-colors whitespace-nowrap shadow">
+          Reserveer nu
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       REVIEWS
+  ════════════════════════════════════════════════ -->
+  <section id="reviews" class="py-24 px-6 lg:px-20 bg-white">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-16">
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Wat gasten zeggen</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">Reviews</h2>
+        <div class="w-16 h-0.5 bg-sand mx-auto"></div>
+      </div>
+
+      <!-- Stars summary -->
+      <div class="flex flex-col items-center mb-14">
+        <div class="flex gap-1 text-amber-400 text-3xl mb-2">★★★★★</div>
+        <p class="text-stone-500 text-sm">4.9 / 5 &nbsp;·&nbsp; Gebaseerd op 48 beoordelingen</p>
+      </div>
+
+      <!-- Review cards -->
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- Review 1 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★★</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "Een absolute pareltje! De kamer was prachtig ingericht, het ontbijt heerlijk en de gastvrouw uiterst vriendelijk. We komen zeker terug."
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">SV</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Sophie V.</p>
+              <p class="text-stone-400 text-xs">Gent, België</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 2 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★★</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "Rust, comfort en stijl in één. Het gevoel alsof je te gast bent bij vrienden. De ligging is perfect en de boetiek beneden is ook een bezoek waard!"
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">MT</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Marc T.</p>
+              <p class="text-stone-400 text-xs">Amsterdam, NL</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 3 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★★</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "Dromus heeft alles wat je zoekt: een warme ontvangst, een sfeervol interieur en een uitmuntende ligging. Ik raad het iedereen aan!"
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">EL</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Eva L.</p>
+              <p class="text-stone-400 text-xs">Brussel, België</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 4 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★★</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "Ongelooflijk rustige en sfeervolle kamer. Het ontbijt was vers en smakelijk. De eigenares is zo vriendelijk. Een 10 op 10!"
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">PD</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Pieter D.</p>
+              <p class="text-stone-400 text-xs">Antwerpen, België</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 5 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★☆</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "Fantastisch verblijf in een unieke locatie. De kamer straalt karakter uit en het bed is heerlijk comfortabel. Zeker een aanrader voor een romantisch weekend."
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">LM</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Laura M.</p>
+              <p class="text-stone-400 text-xs">Parijs, FR</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 6 -->
+        <article class="review-card bg-stone-50 border border-stone-100 rounded-2xl p-7 shadow-sm">
+          <div class="flex gap-1 text-amber-400 mb-4 text-sm">★★★★★</div>
+          <blockquote class="text-stone-600 leading-relaxed mb-6 italic font-light">
+            "De perfecte uitvalsbasis voor een stedentrip. Schoon, rustig, stijlvol en het ontbijt is iets om van te dromen. Wij waren meteen verliefd op Dromus!"
+          </blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-olive/20 flex items-center justify-center text-olive font-semibold text-sm">RK</div>
+            <div>
+              <p class="font-semibold text-stone-800 text-sm">Robin K.</p>
+              <p class="text-stone-400 text-xs">Utrecht, NL</p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       LOCATION / MAP
+  ════════════════════════════════════════════════ -->
+  <section id="location" class="py-24 px-6 lg:px-20 bg-stone-50">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-14">
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Hoe vindt je ons</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">Locatie</h2>
+        <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
+        <p class="text-stone-500 text-sm">Sint Domusstraat 8, 4301 CP Zierikzee, Nederland</p>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden shadow-xl">
+        <iframe
+          title="Locatie Dromus Bed &amp; Boetiek"
+          src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16"
+          width="100%"
+          height="450"
+          style="border:0; display:block;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       RESERVATION FORM
+  ════════════════════════════════════════════════ -->
+  <section id="reservation" class="py-24 px-6 lg:px-20 bg-sand-light">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="text-center mb-14">
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Klaar om te verblijven?</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">Reserveer uw verblijf</h2>
+        <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
+        <p class="text-stone-500 text-sm">Vul het formulier in en wij nemen binnen 24 uur contact met u op om uw reservering te bevestigen.</p>
+      </div>
+
+      <form id="reservationForm" novalidate
+            class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+
+        <!-- Name + Email -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-stone-700 mb-1.5">Naam <span class="text-red-400">*</span></label>
+            <input id="name" name="name" type="text" required placeholder="Voor- en achternaam"
+                   class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 bg-stone-50 transition" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-stone-700 mb-1.5">E-mailadres <span class="text-red-400">*</span></label>
+            <input id="email" name="email" type="email" required placeholder="jouw@email.be"
+                   class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 bg-stone-50 transition" />
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-6">
+          <label for="phone" class="block text-sm font-medium text-stone-700 mb-1.5">Telefoonnummer</label>
+          <input id="phone" name="phone" type="tel" placeholder="+31 xxx xx xx xx"
+                 class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 bg-stone-50 transition" />
+        </div>
+
+        <!-- Checkin + Checkout -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="checkin" class="block text-sm font-medium text-stone-700 mb-1.5">Aankomst <span class="text-red-400">*</span></label>
+            <input id="checkin" name="checkin" type="date" required
+                   class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
+          </div>
+          <div>
+            <label for="checkout" class="block text-sm font-medium text-stone-700 mb-1.5">Vertrek <span class="text-red-400">*</span></label>
+            <input id="checkout" name="checkout" type="date" required
+                   class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
+          </div>
+        </div>
+
+        <!-- Guests -->
+        <div class="mb-6">
+          <label for="guests" class="block text-sm font-medium text-stone-700 mb-1.5">Aantal gasten <span class="text-red-400">*</span></label>
+          <select id="guests" name="guests" required
+                  class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition appearance-none">
+            <option value="" disabled selected>Selecteer</option>
+            <option value="1">1 persoon</option>
+            <option value="2">2 personen</option>
+          </select>
+        </div>
+
+        <!-- Message -->
+        <div class="mb-8">
+          <label for="message" class="block text-sm font-medium text-stone-700 mb-1.5">Opmerkingen</label>
+          <textarea id="message" name="message" rows="4" placeholder="Bijzondere wensen, aankomsttijd, vragen…"
+                    class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 bg-stone-50 transition resize-none"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+                class="w-full bg-olive hover:bg-olive-dark text-white py-4 rounded-xl font-semibold text-sm uppercase tracking-wider transition-colors shadow-md">
+          Verzend aanvraag
+        </button>
+
+        <!-- Success message (hidden) -->
+        <div id="formSuccess" class="hidden mt-6 bg-olive/10 border border-olive/30 text-olive rounded-xl px-5 py-4 text-sm text-center">
+          ✓ &nbsp;Bedankt! We nemen zo snel mogelijk contact met u op.
+        </div>
+
+        <!-- Error message (hidden) -->
+        <div id="formError" class="hidden mt-6 bg-red-50 border border-red-200 text-red-600 rounded-xl px-5 py-4 text-sm text-center">
+          Gelieve alle verplichte velden in te vullen.
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════════ -->
+  <footer class="bg-stone-900 text-white/70 py-12 px-6 lg:px-20">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
+      <div class="text-center md:text-left">
+        <p class="font-serif text-white text-lg font-semibold mb-1">Dromus Bed &amp; Boetiek</p>
+        <p style="font-family:'Deluxxe Chauncy',cursive;">Uw thuis weg van huis</p>
+      </div>
+      <div class="text-center">
+        <p>📍 Sint Domusstraat 8, 4301 CP Zierikzee</p>
+        <p>✉ info@dromuszierikzee.nl &nbsp;·&nbsp; ☎ +31 (0)6 24207480</p>
+      </div>
+      <div class="text-center md:text-right">
+        <p class="mb-1">
+          <a href="#home"        class="hover:text-white transition-colors">Home</a> &nbsp;·&nbsp;
+          <a href="#room"        class="hover:text-white transition-colors">Kamer</a> &nbsp;·&nbsp;
+          <a href="#reviews"     class="hover:text-white transition-colors">Reviews</a> &nbsp;·&nbsp;
+          <a href="#reservation" class="hover:text-white transition-colors">Reserveren</a>
+        </p>
+        <p class="text-white/40 text-xs">&copy; 2026 Dromus Bed &amp; Boetiek. Alle rechten voorbehouden.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════════ -->
+  <script>
+    /* ── Navbar scroll effect ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('bg-stone-900/95', 'shadow-md', 'py-3', 'backdrop-blur-sm');
+        navbar.classList.remove('py-5');
+      } else {
+        navbar.classList.remove('bg-stone-900/95', 'shadow-md', 'py-3', 'backdrop-blur-sm');
+        navbar.classList.add('py-5');
+      }
+    });
+
+    /* ── Mobile menu ── */
+    const menuBtn      = document.getElementById('menuBtn');
+    const mobileMenu   = document.getElementById('mobileMenu');
+    const menuIconOpen  = document.getElementById('menuIconOpen');
+    const menuIconClose = document.getElementById('menuIconClose');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', isOpen);
+      menuIconOpen.classList.toggle('hidden', !isOpen);
+      menuIconClose.classList.toggle('hidden', isOpen);
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      menuIconOpen.classList.remove('hidden');
+      menuIconClose.classList.add('hidden');
+    }
+
+    /* ── Photo slider ── */
+    const slides = document.querySelectorAll('.slide');
+    const dotsContainer = document.getElementById('dots');
+    let current = 0;
+    let autoInterval;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.className = 'w-2 h-2 rounded-full transition-all duration-300 ' + (i === 0 ? 'bg-white scale-125' : 'bg-white/50');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function updateDots() {
+      dotsContainer.querySelectorAll('button').forEach((dot, i) => {
+        dot.className = 'w-2 h-2 rounded-full transition-all duration-300 ' + (i === current ? 'bg-white scale-125' : 'bg-white/50');
+      });
+    }
+
+    function goToSlide(index) {
+      slides[current].style.opacity = '0';
+      current = (index + slides.length) % slides.length;
+      slides[current].style.opacity = '1';
+      updateDots();
+    }
+
+    function changeSlide(dir) {
+      resetAuto();
+      goToSlide(current + dir);
+    }
+
+    function resetAuto() {
+      clearInterval(autoInterval);
+      autoInterval = setInterval(() => goToSlide(current + 1), 5000);
+    }
+
+    resetAuto();
+
+    /* ── Reservation form ── */
+    const form        = document.getElementById('reservationForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const formError   = document.getElementById('formError');
+
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkin').min  = today;
+    document.getElementById('checkout').min = today;
+
+    document.getElementById('checkin').addEventListener('change', function () {
+      document.getElementById('checkout').min = this.value;
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formSuccess.classList.add('hidden');
+      formError.classList.add('hidden');
+
+      const name     = form.name.value.trim();
+      const email    = form.email.value.trim();
+      const checkin  = form.checkin.value;
+      const checkout = form.checkout.value;
+      const guests   = form.guests.value;
+
+      if (!name || !email || !checkin || !checkout || !guests) {
+        formError.classList.remove('hidden');
+        return;
+      }
+
+      if (checkout <= checkin) {
+        formError.textContent = 'De vertrekdatum moet na de aankomstdatum liggen.';
+        formError.classList.remove('hidden');
+        return;
+      }
+
+      // Simulate successful submission
+      formSuccess.classList.remove('hidden');
+      form.reset();
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  </script>
+</body>
+</html>

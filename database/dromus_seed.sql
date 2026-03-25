@@ -17,13 +17,13 @@ VALUES
   ('hero', 'eyebrow', 'nl', 'Welkom bij', 1),
   ('hero', 'title', 'nl', 'Dromus', 1),
   ('hero', 'subtitle', 'nl', 'Bed & Boetiek', 1),
-  ('hero', 'description', 'nl', 'Geniet van een unieke verblijfservaring in ons stijlvol ingerichte gastenkamer, midden in het hart van de stad.', 1),
+  ('hero', 'description', 'nl', 'Geniet van een unieke verblijfservaring in ons stijlvol ingerichte gastenverblijf, midden in het hart van de stad.', 1),
   ('hero', 'cta_label', 'nl', 'Ontdek de kamer', 1),
 
   ('room', 'eyebrow', 'nl', 'Uw verblijf', 1),
-  ('room', 'title', 'nl', 'De Gastenkamer', 1),
+  ('room', 'title', 'nl', 'De Gastenverblijf', 1),
   ('room', 'quote', 'nl', '"Een thuis weg van huis"', 1),
-  ('room', 'description_1', 'nl', 'Onze ruime, lichtrijke gastenkamer combineert hedendaags comfort met een warme, gezellige sfeer. Gelegen op de bovenverdieping van onze boetiek, biedt de kamer een unieke mix van rust en stadsbeleving.', 1),
+  ('room', 'description_1', 'nl', 'Onze ruime, lichtrijke gastenverblijf combineert hedendaags comfort met een warme, gezellige sfeer. Gelegen op de bovenverdieping van onze boetiek, biedt de kamer een unieke mix van rust en stadsbeleving.', 1),
   ('room', 'description_2', 'nl', 'Ontwaak met een heerlijk ontbijt, verken de lokale winkeltjes vlak om de hoek, of ontspan gewoon in uw eigen priveoase.', 1),
   ('room', 'price_prefix', 'nl', 'Vanaf', 1),
   ('room', 'price_line', 'nl', 'EUR 170 / nacht', 1),
@@ -66,7 +66,7 @@ VALUES
   ('home_slider', 'Hero slide 3', 'Hotelkamer detail', 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=80', 3, 1),
   ('home_slider', 'Hero slide 4', 'Zithoek en lichtinval', 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1600&q=80', 4, 1),
 
-  ('room_main', 'Gastenkamer overzicht', 'Gastenkamer overzicht', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80', 1, 1),
+  ('room_main', 'Gastenverblijf overzicht', 'Gastenverblijf overzicht', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80', 1, 1),
 
   ('room_gallery', 'Slaapkamer detail', 'Slaapkamer detail', 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=700&q=80', 1, 1),
   ('room_gallery', 'Badkamer', 'Badkamer', 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=700&q=80', 2, 1),
