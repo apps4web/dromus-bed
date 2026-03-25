@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/apps4web/dromus-bed#readme",
   "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
     "tailwindcss": "^4.2.2"
   }
 }

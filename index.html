@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="dist/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     html { scroll-behavior: smooth; }
 
@@ -23,7 +23,7 @@
     .review-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.10); }
 
     /* ── Form inputs ── */
-    .form-input:focus { outline: none; border-color: #6b7c5c; box-shadow: 0 0 0 3px rgba(107,124,92,.20); }
+    .form-input:focus { outline: none; border-color: #b5607a; box-shadow: 0 0 0 3px rgba(181,96,122,.20); }
   </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased">
@@ -32,8 +32,9 @@
        NAVIGATION
   ════════════════════════════════════════════════ -->
   <nav id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 py-5 px-6 lg:px-12 flex items-center justify-between">
-    <a href="#home" class="font-serif text-xl font-semibold text-white tracking-wide drop-shadow">
-      Dromus Bed &amp; Boetiek
+    <a href="#home" class="flex items-center gap-3 font-serif text-xl font-semibold text-white tracking-wide drop-shadow" style="font-family:'Nunito',sans-serif;">
+      <img src="img/dromus-logo.jpg" alt="DROMUS logo" class="w-10 h-10 rounded-full object-cover border border-white/40 shadow-md" />
+      <span>Dromus Bed &amp; Boetiek</span>
     </a>
     <!-- Desktop links -->
     <ul class="hidden md:flex gap-8 text-sm font-medium text-white/90 drop-shadow">
@@ -75,10 +76,12 @@
 
     <!-- Hero text -->
     <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+      <img src="img/dromus-logo.jpg" alt="DROMUS Bed &amp; Boetiek logo" class="w-[7.5rem] h-[7.5rem] md:w-[9rem] md:h-[9rem] rounded-full object-cover border-[3px] border-white/75 shadow-2xl mb-5" />
       <p class="text-sand-light uppercase tracking-widest text-sm mb-3 font-medium">Welkom bij</p>
-      <h1 class="font-serif text-5xl md:text-7xl text-white font-semibold leading-tight mb-6">
-        Dromus<br/>Bed &amp; Boetiek
+      <h1 class="font-serif text-5xl md:text-7xl text-white font-semibold leading-tight mb-2">
+        Dromus
       </h1>
+      <p class="text-white/90 text-3xl md:text-4xl mb-6" style="font-family:'Deluxxe Chauncy',cursive; font-weight:600;">Bed &amp; Boetiek</p>
       <p class="text-white/80 text-lg md:text-xl max-w-xl mb-10 font-light">
         Geniet van een unieke verblijfservaring in ons stijlvol ingerichte gastenkamer, midden in het hart van de stad.
       </p>
@@ -182,8 +185,8 @@
       <div class="mt-14 bg-olive text-white rounded-2xl py-10 px-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
         <div>
           <p class="text-white/70 text-sm uppercase tracking-widest mb-1">Vanaf</p>
-          <p class="font-serif text-4xl font-semibold">€ 95 <span class="text-xl font-light">/ nacht</span></p>
-          <p class="text-white/70 text-sm mt-1">Inclusief ontbijt &amp; belastingen</p>
+          <p class="font-serif text-4xl font-semibold">€ 170 <span class="text-xl font-light">/ nacht</span></p>
+          <p class="text-white/70 text-sm mt-1">Inclusief belastingen</p>
         </div>
         <a href="#reservation"
            class="bg-white text-olive px-8 py-3 rounded-full font-semibold text-sm uppercase tracking-wider hover:bg-sand-light transition-colors whitespace-nowrap shadow">
@@ -310,6 +313,35 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════
+       LOCATION / MAP
+  ════════════════════════════════════════════════ -->
+  <section id="location" class="py-24 px-6 lg:px-20 bg-stone-50">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-14">
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Hoe vindt je ons</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">Locatie</h2>
+        <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
+        <p class="text-stone-500 text-sm">Sint Domusstraat 8, 4301 CP Zierikzee, Nederland</p>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden shadow-xl">
+        <iframe
+          title="Locatie Dromus Bed &amp; Boetiek"
+          src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16"
+          width="100%"
+          height="450"
+          style="border:0; display:block;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
        RESERVATION FORM
   ════════════════════════════════════════════════ -->
   <section id="reservation" class="py-24 px-6 lg:px-20 bg-sand-light">
@@ -342,7 +374,7 @@
         <!-- Phone -->
         <div class="mb-6">
           <label for="phone" class="block text-sm font-medium text-stone-700 mb-1.5">Telefoonnummer</label>
-          <input id="phone" name="phone" type="tel" placeholder="+32 xxx xx xx xx"
+          <input id="phone" name="phone" type="tel" placeholder="+31 xxx xx xx xx"
                  class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 bg-stone-50 transition" />
         </div>
 
@@ -405,11 +437,11 @@
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
       <div class="text-center md:text-left">
         <p class="font-serif text-white text-lg font-semibold mb-1">Dromus Bed &amp; Boetiek</p>
-        <p>Uw thuis weg van huis</p>
+        <p style="font-family:'Deluxxe Chauncy',cursive;">Uw thuis weg van huis</p>
       </div>
       <div class="text-center">
-        <p>📍 Dromusstraat 1 · B-0000 Stad</p>
-        <p>✉ info@dromus.be &nbsp;·&nbsp; ☎ +32 000 00 00 00</p>
+        <p>📍 Sint Domusstraat 8, 4301 CP Zierikzee</p>
+        <p>✉ info@dromuszierikzee.nl &nbsp;·&nbsp; ☎ +31 (0)6 24207480</p>
       </div>
       <div class="text-center md:text-right">
         <p class="mb-1">
