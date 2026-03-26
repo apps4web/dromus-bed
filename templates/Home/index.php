@@ -20,7 +20,7 @@ $assetUrl = function (?string $url): string {
   return $this->Url->webroot(ltrim($url, '/'));
 };
 
-$logo = $photosBySection['branding'][0]->image_url ?? 'img/dromus-logo.jpg';
+$logo = $photosBySection['branding'][1]->image_url ?? 'img/Musje.png';
 $logoUrl = $assetUrl((string)$logo);
 
 $heroSlides = $photosBySection['home_slider'] ?? [];
@@ -44,41 +44,18 @@ $successMessage = $this->Flash->render('flash');
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?></title>
   <link rel="stylesheet" href="<?= h($this->Url->webroot('dist/style.css')) ?>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    html { scroll-behavior: smooth; }
-    .slide { transition: opacity 0.8s ease; }
-    .gallery-img { transition: transform 0.4s ease, box-shadow 0.4s ease; }
-    .gallery-img:hover { transform: scale(1.03); box-shadow: 0 20px 40px rgba(0,0,0,.18); }
-    .review-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .review-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.10); }
-    .form-input:focus { outline: none; border-color: #b5607a; box-shadow: 0 0 0 3px rgba(181,96,122,.20); }
-    .show-from-600 { display: none !important; }
-    .navbar-shell { min-height: 3.5rem; }
-    .nav-logo-wrap { transform: translate(-50%, -15%); }
-    .nav-logo-size { width: 6rem; height: 6rem; }
-    @media (min-width: 768px) {
-      .navbar-shell { min-height: 4.25rem; }
-      .nav-logo-wrap { transform: translate(-50%, -25%); }
-      .nav-logo-size { width: 8rem; height: 8rem; }
-    }
-    @media (min-width: 600px) {
-      .show-from-600 { display: block !important; }
-    }
-  </style>
+  <link rel="stylesheet" href="<?= h($this->Url->webroot('css/home-page.css')) ?>" />
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased">
 
-  <nav id="navbar" class="navbar-shell fixed top-0 inset-x-0 w-full z-50 transition-all duration-300 py-2 px-6 lg:px-12 flex items-center justify-end md:justify-between relative overflow-visible" style="position:fixed; top:0; left:0; right:0;">
+  <nav id="navbar" class="navbar-shell navbar-fixed-shell fixed top-0 inset-x-0 w-full z-50 transition-all duration-300 py-2 px-6 lg:px-12 flex items-center justify-end md:justify-between relative overflow-visible">
     <a href="#home" class="nav-logo-wrap absolute left-1/2 top-1/2 z-20" aria-label="<?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?>">
-      <img src="<?= h($logoUrl) ?>" alt="DROMUS logo" class="nav-logo-size rounded-full object-cover border-2 border-white/70 shadow-xl" />
+      <img src="<?= h($logoUrl) ?>" alt="DROMUS logo" class="nav-logo-size rounded-full object-cover border-2 border-white/70" />
     </a>
-    <ul class="hidden md:flex absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 gap-8 text-sm font-medium text-white/90 drop-shadow">
-      <li><a href="#room" class="hover:text-white transition-colors">Het verblijf</a></li>
-      <li><a href="#about" class="hover:text-white transition-colors">Over ons</a></li>
-      <li><a href="#reservation" class="hover:text-white transition-colors">Reserveren</a></li>
+    <ul id="menu-items" class="hidden md:flex absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 gap-8 text-sm font-medium text-white/90 drop-shadow">
+      <li><a href="#room" class="hover:text-stone transition-colors">Het verblijf</a></li>
+      <li><a href="#about" class="hover:text-stone transition-colors">Over ons</a></li>
+      <li><a href="#reservation" class="hover:text-stone transition-colors">Reserveren</a></li>
     </ul>
     <button id="menuBtn" class="md:hidden absolute right-6 top-1/2 -translate-y-1/2 text-white focus:outline-none z-30" aria-label="Menu openen">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -97,7 +74,7 @@ $successMessage = $this->Flash->render('flash');
   <section id="home" class="relative w-full h-screen overflow-hidden">
     <div id="slider" class="absolute inset-0">
       <?php foreach ($heroSlides as $idx => $slide): ?>
-        <div class="slide absolute inset-0 <?= $idx === 0 ? 'opacity-100' : 'opacity-0' ?>" style="background: url('<?= h($assetUrl((string)$slide->image_url)) ?>') center/cover no-repeat;"></div>
+        <div class="slide hero-slide-bg absolute inset-0 <?= $idx === 0 ? 'opacity-100' : 'opacity-0' ?>" style="background-image: url('<?= h($assetUrl((string)$slide->image_url)) ?>');"></div>
       <?php endforeach; ?>
     </div>
 
@@ -106,8 +83,8 @@ $successMessage = $this->Flash->render('flash');
     <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
       <img src="<?= h($logoUrl) ?>" alt="DROMUS Bed &amp; Boetiek logo" class="hidden xl:block w-[7.5rem] h-[7.5rem] md:w-[9rem] md:h-[9rem] rounded-full object-cover border-[3px] border-white/75 shadow-2xl mb-5" />
       <p class="show-from-600 text-sand-light uppercase tracking-widest text-sm mb-3 font-medium"><?= h($text($texts, 'hero.eyebrow', 'Welkom bij')) ?></p>
-      <h1 class="font-serif text-5xl md:text-7xl text-white font-semibold leading-tight mb-2"><?= h($text($texts, 'hero.title', 'Dromus')) ?></h1>
-      <p class="text-white/90 text-3xl md:text-4xl mb-6" style="font-family:'Deluxxe Chauncy',cursive; font-weight:600;"><?= h($text($texts, 'hero.subtitle', 'Bed & Boetiek')) ?></p>
+      <h1 class="home-hero-title text-5xl md:text-7xl text-white font-semibold leading-tight mb-2"><?= h($text($texts, 'hero.title', 'Dromus')) ?></h1>
+      <p class="home-script-strong text-white/90 text-3xl md:text-4xl mb-6"><?= h($text($texts, 'hero.subtitle', 'Bed & Boetiek')) ?></p>
       <p class="text-white/80 text-lg md:text-xl max-w-xl mb-10 font-light"><?= h($text($texts, 'hero.description', 'Geniet van een unieke verblijfservaring in ons stijlvol ingerichte gastenverblijf, midden in het hart van de stad.')) ?></p>
       <a href="#room" class="inline-block bg-olive text-white px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-lg"><?= h($text($texts, 'hero.cta_label', 'Ontdek de kamer')) ?></a>
     </div>
@@ -126,7 +103,7 @@ $successMessage = $this->Flash->render('flash');
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
         <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3"><?= h($text($texts, 'room.eyebrow', 'Uw verblijf')) ?></p>
-        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'room.title', 'De Gastenverblijf')) ?></h2>
+        <h2 class="home-section-title text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'room.title', 'De Gastenverblijf')) ?></h2>
         <div class="w-16 h-0.5 bg-sand mx-auto"></div>
       </div>
 
@@ -157,7 +134,7 @@ $successMessage = $this->Flash->render('flash');
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
         <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3"><?= h($text($texts, 'reviews.eyebrow', 'Wat gasten zeggen')) ?></p>
-        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'reviews.title', 'Reviews')) ?></h2>
+        <h2 class="home-section-title text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'reviews.title', 'Reviews')) ?></h2>
         <div class="w-16 h-0.5 bg-sand mx-auto"></div>
       </div>
 
@@ -183,7 +160,7 @@ $successMessage = $this->Flash->render('flash');
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
         <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Over ons</p>
-        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5">Bed en boetiek in een</h2>
+        <h2 class="home-about-title text-4xl md:text-5xl text-stone-800 mb-5">Bed en boetiek in een</h2>
         <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
         <p class="text-stone-600 max-w-3xl mx-auto leading-relaxed">
           Bij Dromus combineren we de rust van een kleinschalig bed &amp; breakfast met de creativiteit van een boetiek vol handgemaakte items.
@@ -200,7 +177,7 @@ $successMessage = $this->Flash->render('flash');
           <p>
             Zin om de collectie te ontdekken? Bezoek onze boetiekwebsite en bekijk de handgemaakte selectie online.
           </p>
-          <a href="<?= h($text($texts, 'about.boutique_url', 'https://www.dromusboetiek.nl')) ?>" target="_blank" rel="noopener noreferrer" class="flex w-fit items-center gap-2 bg-olive text-white px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-md" style="margin-top: 1rem;">
+          <a href="<?= h($text($texts, 'about.boutique_url', 'https://www.dromusboetiek.nl')) ?>" target="_blank" rel="noopener noreferrer" class="boutique-link flex w-fit items-center gap-2 bg-olive text-white px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-md">
             Naar de boetiek
             <span aria-hidden="true">-></span>
           </a>
@@ -218,12 +195,12 @@ $successMessage = $this->Flash->render('flash');
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-14">
         <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3"><?= h($text($texts, 'location.eyebrow', 'Hoe vindt je ons')) ?></p>
-        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'location.title', 'Locatie')) ?></h2>
+        <h2 class="home-location-title text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'location.title', 'Locatie')) ?></h2>
         <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
         <p class="text-stone-500 text-sm"><?= h($text($texts, 'location.address', 'Sint Domusstraat 8, 4301 CP Zierikzee, Nederland')) ?></p>
       </div>
       <div class="rounded-2xl overflow-hidden shadow-xl">
-        <iframe title="Locatie Dromus Bed &amp; Boetiek" src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16" width="100%" height="450" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe title="Locatie Dromus Bed &amp; Boetiek" src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16" width="100%" height="450" class="location-map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </section>
@@ -232,7 +209,7 @@ $successMessage = $this->Flash->render('flash');
     <div class="max-w-3xl mx-auto">
       <div class="text-center mb-14">
         <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3"><?= h($text($texts, 'reservation.eyebrow', 'Klaar om te verblijven?')) ?></p>
-        <h2 class="font-serif text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'reservation.title', 'Reserveer uw verblijf')) ?></h2>
+        <h2 class="home-reservation-title text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'reservation.title', 'Reserveer uw verblijf')) ?></h2>
         <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
         <p class="text-stone-500 text-sm"><?= h($text($texts, 'reservation.intro', 'Vul het formulier in en wij nemen binnen 24 uur contact met u op om uw reservering te bevestigen.')) ?></p>
       </div>
@@ -293,12 +270,12 @@ $successMessage = $this->Flash->render('flash');
   <footer class="bg-stone-900 text-white/70 py-12 px-6 lg:px-20">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
       <div class="text-center md:text-left">
-        <p class="font-serif text-white text-lg font-semibold mb-1">Dromus Bed &amp; Boetiek</p>
-        <p style="font-family:'Deluxxe Chauncy',cursive;">Uw thuis weg van huis</p>
+        <p class="font-serif text-white text-lg font-semibold mb-1"><span class="brand">Dromus</span> <span class="brand-sub">Bed &amp; Boetiek</span></p>
+        <p>Uw thuis weg van huis</p>
       </div>
       <div class="text-center">
         <p>Sint Domusstraat 8, 4301 CP Zierikzee</p>
-        <p>info@dromuszierikzee.nl &nbsp;&middot;&nbsp; +31 (0)6 24207480</p>
+        <p><a href="mailto:info@dromuszierikzee.nl">info@dromuszierikzee.nl</a> &nbsp;&middot;&nbsp; <a href="tel:+31624207480">+31 (0)6 24207480</a></p>
       </div>
       <div class="text-center md:text-right">
         <p class="mb-1">
@@ -315,15 +292,29 @@ $successMessage = $this->Flash->render('flash');
   <script>
     const navbar = document.getElementById('navbar');
     const homeSection = document.getElementById('home');
+    const menuNav = document.getElementById('menu-items');
+    const menuLinks = menuNav.querySelectorAll('a');
     function updateNavbarState() {
       const homeBottom = homeSection ? homeSection.offsetTop + homeSection.offsetHeight : 0;
       const isInHome = window.scrollY + navbar.offsetHeight < homeBottom;
       if (isInHome) {
         navbar.classList.add('bg-transparent');
-        navbar.classList.remove('bg-stone-900/95', 'shadow-md', 'backdrop-blur-sm');
+        navbar.classList.remove('bg-white/99', 'shadow-md', 'backdrop-blur-sm');
+        menuNav.classList.add('text-white/90');
+        menuNav.classList.remove('text-stone-800');
+        menuLinks.forEach(link => {
+          link.classList.add('hover:text-stone', 'text-white/90');
+          link.classList.remove('hover:text-stone', 'text-stone-800');
+        });
       } else {
         navbar.classList.remove('bg-transparent');
-        navbar.classList.add('bg-stone-900/95', 'shadow-md', 'backdrop-blur-sm');
+        navbar.classList.add('bg-white/99', 'shadow-md', 'backdrop-blur-sm');
+        menuNav.classList.remove('text-white/90');
+        menuNav.classList.add('text-stone-800');
+        menuLinks.forEach(link => {
+          link.classList.remove('hover:text-stone', 'text-white/90');
+          link.classList.add('hover:text-stone', 'text-stone-800');
+        });
       }
     }
 
