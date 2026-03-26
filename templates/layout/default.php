@@ -21,11 +21,21 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php if (\Cake\Core\Configure::read('debug')): ?>
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta name="googlebot" content="noindex, nofollow, noarchive">
+    <?php else: ?>
+        <meta name="robots" content="index, follow, archive">
+        <meta name="googlebot" content="index, follow, archive">
+    <?php endif; ?>
     <title>
         <?= $cakeDescription ?>:
         <?= $this->fetch('title') ?>
     </title>
-    <?= $this->Html->meta('icon') ?>
+    <?= $this->Html->meta('icon', '/favicon.ico') ?>
+    <?= $this->Html->meta('icon', '/favicon-32x32.png', ['type' => 'image/png', 'sizes' => '32x32']) ?>
+    <?= $this->Html->meta('icon', '/favicon-16x16.png', ['type' => 'image/png', 'sizes' => '16x16']) ?>
+    <?= $this->Html->meta('apple-touch-icon', '/apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
 
@@ -36,7 +46,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
+            <a href="<?= $this->Url->build('/') ?>" aria-label="Dromus Bed &amp; Boetiek">
+                <?= $this->Html->image('dromus-logo.jpg', [
+                    'alt' => 'Dromus Bed & Boetiek logo',
+                    'style' => 'height: 42px; width: auto; display: block;',
+                ]) ?>
+            </a>
         </div>
         <div class="top-nav-links">
             <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>

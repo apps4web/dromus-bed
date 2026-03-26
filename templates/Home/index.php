@@ -42,7 +42,18 @@ $successMessage = $this->Flash->render('flash');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <?php if (\Cake\Core\Configure::read('debug')): ?>
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive" />
+  <?php else: ?>
+    <meta name="robots" content="index, follow, archive" />
+    <meta name="googlebot" content="index, follow, archive" />
+  <?php endif; ?>
   <title><?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?></title>
+  <?= $this->Html->meta('icon', '/favicon.ico') ?>
+  <?= $this->Html->meta('icon', '/favicon-32x32.png', ['type' => 'image/png', 'sizes' => '32x32']) ?>
+  <?= $this->Html->meta('icon', '/favicon-16x16.png', ['type' => 'image/png', 'sizes' => '16x16']) ?>
+  <?= $this->Html->meta('apple-touch-icon', '/apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
   <link rel="stylesheet" href="<?= h($this->Url->webroot('dist/style.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/home-page.css')) ?>" />
 </head>

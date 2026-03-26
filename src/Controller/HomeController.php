@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 
@@ -12,8 +13,19 @@ class HomeController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->addUnauthenticatedActions(['index', 'reserve']);
+        $this->Authentication->addUnauthenticatedActions(['index', 'reserve', 'robots']);
         $this->Authorization->skipAuthorization();
+    }
+
+    public function robots(): Response
+    {
+        $content = Configure::read('debug')
+            ? "User-agent: *\nDisallow: /\n"
+            : "User-agent: *\nAllow: /\n";
+
+        return $this->response
+            ->withType('text/plain')
+            ->withStringBody($content);
     }
 
     public function index(): void

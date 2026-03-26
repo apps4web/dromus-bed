@@ -68,6 +68,7 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/admin/reviews/{id}/edit', ['controller' => 'Admin', 'action' => 'editReview'], ['id' => '\\d+']);
         $builder->connect('/login', ['controller' => 'Users', 'action' => 'login']);
         $builder->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+        $builder->connect('/robots.txt', ['controller' => 'Home', 'action' => 'robots']);
         $builder->connect('/reservations', ['controller' => 'Home', 'action' => 'reserve', '_method' => 'POST']);
 
         /*
