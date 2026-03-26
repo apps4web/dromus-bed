@@ -56,8 +56,54 @@ $successMessage = $this->Flash->render('flash');
   <?= $this->Html->meta('apple-touch-icon', '/apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
   <link rel="stylesheet" href="<?= h($this->Url->webroot('dist/style.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/home-page.css')) ?>" />
+  <style>
+    .bird-heading-target {
+      position: relative;
+      display: inline-block;
+      padding-inline: 0.9rem;
+    }
+
+    .heading-bird {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 33px;
+      height: 33px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      transition: transform 2200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
+      will-change: transform;
+    }
+
+    .heading-bird.is-flying {
+      animation: bird-flap 850ms ease-in-out infinite alternate;
+    }
+
+    .heading-bird.is-flying.is-landed {
+      animation-play-state: paused;
+    }
+
+    @keyframes bird-flap {
+      from {
+        scale: 1;
+      }
+      to {
+        scale: 1.08;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .heading-bird {
+        transition: none;
+        animation: none;
+      }
+    }
+  </style>
 </head>
-<body class="bg-stone-50 text-stone-800 font-sans antialiased">
+<body class="bg-stone-50 text-stone-800 font-sans antialiased" data-bird-icon-url="<?= h($this->Url->webroot('img/Musje.png')) ?>">
 
   <nav id="navbar" class="navbar-shell navbar-fixed-shell fixed top-0 inset-x-0 w-full z-50 transition-all duration-300 py-2 px-6 lg:px-12 flex items-center justify-end md:justify-between relative overflow-visible">
     <a href="#home" class="nav-logo-wrap absolute left-1/2 top-1/2 z-20" aria-label="<?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?>">
@@ -310,7 +356,7 @@ $successMessage = $this->Flash->render('flash');
       const isInHome = window.scrollY + navbar.offsetHeight < homeBottom;
       if (isInHome) {
         navbar.classList.add('bg-transparent');
-        navbar.classList.remove('bg-white/99', 'shadow-md', 'backdrop-blur-sm');
+        navbar.classList.remove('bg-white', 'shadow-md', 'backdrop-blur-sm');
         menuNav.classList.add('text-white/90');
         menuNav.classList.remove('text-stone-800');
         menuLinks.forEach(link => {
@@ -319,7 +365,7 @@ $successMessage = $this->Flash->render('flash');
         });
       } else {
         navbar.classList.remove('bg-transparent');
-        navbar.classList.add('bg-white/99', 'shadow-md', 'backdrop-blur-sm');
+        navbar.classList.add('bg-white', 'shadow-md', 'backdrop-blur-sm');
         menuNav.classList.remove('text-white/90');
         menuNav.classList.add('text-stone-800');
         menuLinks.forEach(link => {
@@ -397,6 +443,8 @@ $successMessage = $this->Flash->render('flash');
     checkin.addEventListener('change', function () {
       checkout.min = this.value;
     });
+
   </script>
+  <script async src="<?= h($this->Url->webroot('js/home-bird.js')) ?>"></script>
 </body>
 </html>

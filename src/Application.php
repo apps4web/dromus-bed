@@ -71,22 +71,23 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier('Authentication.Password', [
-            'resolver' => [
-                'className' => 'Authentication.Orm',
-                'userModel' => 'Users',
-            ],
-            'fields' => [
-                'username' => 'email',
-                'password' => 'password_hash',
-            ],
-        ]);
-
         $service->loadAuthenticator('Authentication.Session');
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
                 'username' => 'email',
                 'password' => 'password_hash',
+            ],
+            'identifier' => [
+                'Authentication.Password' => [
+                    'resolver' => [
+                        'className' => 'Authentication.Orm',
+                        'userModel' => 'Users',
+                    ],
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password_hash',
+                    ],
+                ],
             ],
         ]);
 
