@@ -67,7 +67,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService([
-            'unauthenticatedRedirect' => '/login',
+            'unauthenticatedRedirect' => [
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
             'queryParam' => 'redirect',
         ]);
 

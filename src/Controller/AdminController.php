@@ -23,14 +23,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot het CMS.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $this->set([
@@ -47,14 +47,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot reservaties.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $selectedStatus = (string)$this->request->getQuery('status', 'all');
@@ -83,21 +83,21 @@ class AdminController extends AppController
 
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot reservaties.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $status = (string)$this->request->getData('status');
         if (!in_array($status, self::RESERVATION_STATUSES, true)) {
             $this->Flash->error('Ongeldige reservatiestatus.');
 
-            return $this->redirect('/admin/reservations');
+            return $this->redirect(['controller' => 'Admin', 'action' => 'reservations']);
         }
 
         $reservationsTable = $this->fetchTable('Reservations');
@@ -115,24 +115,28 @@ class AdminController extends AppController
 
         $selectedStatus = (string)$this->request->getQuery('status', 'all');
         if (in_array($selectedStatus, self::RESERVATION_STATUSES, true)) {
-            return $this->redirect('/admin/reservations?status=' . urlencode($selectedStatus));
+            return $this->redirect([
+                'controller' => 'Admin',
+                'action' => 'reservations',
+                '?' => ['status' => $selectedStatus],
+            ]);
         }
 
-        return $this->redirect('/admin/reservations');
+        return $this->redirect(['controller' => 'Admin', 'action' => 'reservations']);
     }
 
     public function users(): ?Response
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if ($role !== 'admin') {
             $this->Flash->error('Alleen admins hebben toegang tot gebruikersbeheer.');
 
-            return $this->redirect('/admin');
+            return $this->redirect(['controller' => 'Admin', 'action' => 'dashboard']);
         }
 
         $users = $this->fetchTable('Users')
@@ -150,14 +154,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot teksten.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $texts = $this->fetchTable('SiteTexts')
@@ -174,14 +178,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot teksten.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $textsTable = $this->fetchTable('SiteTexts');
@@ -208,14 +212,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot foto\'s.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $photos = $this->fetchTable('SitePhotos')
@@ -232,14 +236,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot foto\'s.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $photosTable = $this->fetchTable('SitePhotos');
@@ -266,14 +270,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot reviews.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $reviews = $this->fetchTable('SiteReviews')
@@ -290,14 +294,14 @@ class AdminController extends AppController
     {
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
-            return $this->redirect('/login');
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
         $role = (string)$identity->get('role');
         if (!in_array($role, self::CMS_ROLES, true)) {
             $this->Flash->error('U heeft geen toegang tot reviews.');
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         $reviewsTable = $this->fetchTable('SiteReviews');

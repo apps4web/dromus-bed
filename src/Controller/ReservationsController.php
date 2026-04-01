@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Reservations Controller
  */
@@ -11,14 +13,8 @@ class ReservationsController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event): void
     {
         parent::beforeFilter($event);
-        if (isset($this->Authentication)) {
-            $this->Authentication->addUnauthenticatedActions(['ajaxAdd']);
-        }
+        $this->Authentication->allowUnauthenticated(['ajaxAdd']);
     }
-
-
-
-
 
     /**
      * Index method
@@ -94,26 +90,10 @@ class ReservationsController extends AppController
         if ($this->request->is('post')) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             if ($this->Reservations->save($reservation)) {
-                if ($this->request->is('ajax')) {
-                    $this->response = $this->response->withType('application/json');
-                    $this->set([ 'success' => true, 'message' => __('Bedankt! We nemen zo snel mogelijk contact met u op.'), '_serialize' => ['success', 'message'] ]);
-                    return;
-                }
                 $this->Flash->success(__('The reservation has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-            if ($this->request->is('ajax')) {
-                $this->response = $this->response->withType('application/json');
-                $debug = (bool)\Cake\Core\Configure::read('debug');
-                $errors = $debug ? $reservation->getErrors() : null;
-                $this->set([
-                    'success' => false,
-                    'message' => __('Gelieve alle verplichte velden correct in te vullen.'),
-                    'errors' => $errors,
-                    '_serialize' => ['success', 'message', 'errors']
-                ]);
-                return;
-            }
+
             $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
         }
         $this->set(compact('reservation', 'confirmedRanges'));
@@ -197,5 +177,59 @@ class ReservationsController extends AppController
             ];
         }
         $this->set(compact('calendarData'));
+    }
+
+    /**
+     * AJAX endpoint for reservation form
+     */
+    public function ajaxAdd(): ?Response
+    {
+        $this->viewBuilder()->setLayout('ajax');
+        $reservation = $this->Reservations->newEmptyEntity();
+        // $this->Authorization->authorize($reservation);
+
+        $this->Authorization->skipAuthorization();
+        // Get confirmed reservation date ranges
+        $confirmed = $this->Reservations->find()
+            ->select(['checkin_date', 'checkout_date'])
+            ->where(['status' => 'confirmed'])
+            ->all();
+        $confirmedRanges = [];
+        foreach ($confirmed as $r) {
+            $confirmedRanges[] = [
+                $r->checkin_date,
+                $r->checkout_date
+            ];
+        }
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            if (isset($data['checkin_date'])) {
+                $data['checkin_date'] = explode(' - ', $data['checkin_date'])[0] ?? null;
+            }
+            $reservation = $this->Reservations->patchEntity($reservation, $data);
+            if ($this->Reservations->save($reservation)) {
+                return $this->response
+                    ->withType('application/json')
+                    ->withStringBody((string)json_encode([
+                        'success' => true,
+                        'message' => __('Bedankt! We nemen zo snel mogelijk contact met u op.'),
+                    ]));
+            }
+            $debug = (bool)\Cake\Core\Configure::read('debug');
+            $errors = $debug ? $reservation->getErrors() : null;
+
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody((string)json_encode([
+                    'success' => false,
+                    'message' => __('Gelieve alle verplichte velden correct in te vullen.'),
+                    'errors' => $errors,
+                ]));
+        }
+        $csrfToken = $this->request->getAttribute('csrfToken');
+        $this->set(compact('reservation','confirmedRanges', 'csrfToken'));
+        $this->render('ajax_add');
+
+        return null;
     }
 }

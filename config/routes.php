@@ -50,7 +50,6 @@ return function (RouteBuilder $routes): void {
     $routes->setRouteClass(DashedRoute::class);
 
     $routes->scope('/', function (RouteBuilder $builder): void {
-            $builder->connect('/reservations/ajax-add', ['controller' => 'Reservations', 'action' => 'ajaxAdd']);
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file

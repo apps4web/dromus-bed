@@ -32,10 +32,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $cakeDescription ?>:
         <?= $this->fetch('title') ?>
     </title>
-    <?= $this->Html->meta('icon', '/favicon.ico') ?>
-    <?= $this->Html->meta('icon', '/favicon-32x32.png', ['type' => 'image/png', 'sizes' => '32x32']) ?>
-    <?= $this->Html->meta('icon', '/favicon-16x16.png', ['type' => 'image/png', 'sizes' => '16x16']) ?>
-    <?= $this->Html->meta('apple-touch-icon', '/apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
+    <?= $this->Html->meta('icon', 'favicon.ico') ?>
+    <?= $this->Html->meta('icon', 'favicon-32x32.png', ['type' => 'image/png', 'sizes' => '32x32']) ?>
+    <?= $this->Html->meta('icon', 'favicon-16x16.png', ['type' => 'image/png', 'sizes' => '16x16']) ?>
+    <?= $this->Html->meta('apple-touch-icon', 'apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
 

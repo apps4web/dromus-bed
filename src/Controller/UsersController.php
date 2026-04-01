@@ -23,9 +23,13 @@ class UsersController extends AppController
 
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
-            $target = $this->request->getQuery('redirect', '/admin');
+            $target = $this->request->getQuery('redirect');
 
-            return $this->redirect($target);
+            if (is_string($target) && $target !== '') {
+                return $this->redirect($target);
+            }
+
+            return $this->redirect(['controller' => 'Admin', 'action' => 'dashboard']);
         }
 
         if ($this->request->is('post') && (!$result || !$result->isValid())) {
@@ -44,6 +48,6 @@ class UsersController extends AppController
         $this->Authentication->logout();
         $this->Flash->success('U bent uitgelogd.');
 
-        return $this->redirect('/login');
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 }

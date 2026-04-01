@@ -103,6 +103,10 @@ class HomeController extends AppController
             $this->Flash->error('Gelieve alle verplichte velden correct in te vullen.');
         }
 
-        return $this->redirect('/#reservation');
+        return $this->redirect([
+            'controller' => 'Home',
+            'action' => 'index',
+            '#' => 'reservation',
+        ]);
     }
 }
