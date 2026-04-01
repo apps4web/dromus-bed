@@ -5,9 +5,9 @@
  */
 ?>
 <div style="max-width:960px;margin:40px auto;padding:0 16px;">
+<?= $this->Html->link(__('Back to List'), ['action' => 'index'], ['class' => 'button float-right']) ?>
+<h1><?= __('Reservations Calendar') ?></h1>
 <div class="reservations agenda content">
-    <?= $this->Html->link(__('Back to List'), ['action' => 'index'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Reservations Calendar') ?></h3>
     <div id="calendar"></div>
 </div>
 </div>

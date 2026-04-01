@@ -48,11 +48,11 @@
                 </tr>
                 <tr>
                     <th><?= __('Checkin Date') ?></th>
-                    <td><?= h($reservation->checkin_date) ?></td>
+                    <td><?= $reservation->checkin_date instanceof \DateTimeInterface ? h($reservation->checkin_date->format('d-m-Y')) : h((string)$reservation->checkin_date) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Checkout Date') ?></th>
-                    <td><?= h($reservation->checkout_date) ?></td>
+                    <td><?= $reservation->checkout_date instanceof \DateTimeInterface ? h($reservation->checkout_date->format('d-m-Y')) : h((string)$reservation->checkout_date) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Created At') ?></th>

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use DateTimeImmutable;
 use Cake\Http\Response;
 
 /**
@@ -10,6 +11,68 @@ use Cake\Http\Response;
  */
 class ReservationsController extends AppController
 {
+    /**
+     * Normalize supported incoming date formats to Y-m-d for ORM patching.
+     *
+     * @param array<string, mixed> $data Request data.
+     * @return array<string, mixed>
+     */
+    private function normalizeReservationDates(array $data): array
+    {
+        if (isset($data['checkin_date']) && is_string($data['checkin_date'])) {
+            $rangeParts = preg_split('/\s+-\s+/', trim($data['checkin_date']));
+            if (is_array($rangeParts) && isset($rangeParts[0])) {
+                $normalizedCheckin = $this->normalizeDateString($rangeParts[0]);
+                if ($normalizedCheckin !== null) {
+                    $data['checkin_date'] = $normalizedCheckin;
+                }
+
+                if ((!isset($data['checkout_date']) || $data['checkout_date'] === '') && isset($rangeParts[1])) {
+                    $normalizedCheckout = $this->normalizeDateString($rangeParts[1]);
+                    if ($normalizedCheckout !== null) {
+                        $data['checkout_date'] = $normalizedCheckout;
+                    }
+                }
+            }
+        }
+
+        foreach (['checkin_date', 'checkout_date'] as $field) {
+            if (!isset($data[$field]) || !is_string($data[$field])) {
+                continue;
+            }
+
+            $normalized = $this->normalizeDateString($data[$field]);
+            if ($normalized !== null) {
+                $data[$field] = $normalized;
+            }
+        }
+
+        return $data;
+    }
+
+    private function normalizeDateString(string $value): ?string
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return null;
+        }
+
+        $formats = ['Y-m-d', 'd-m-Y', 'j-n-Y', 'd-m-y', 'j-n-y', 'n/j/y', 'n/j/Y', 'j/n/y', 'j/n/Y', 'm/d/y', 'm/d/Y', 'd/m/y', 'd/m/Y'];
+        foreach ($formats as $format) {
+            $date = DateTimeImmutable::createFromFormat('!' . $format, $value);
+            if ($date !== false) {
+                return $date->format('Y-m-d');
+            }
+        }
+
+        $timestamp = strtotime($value);
+        if ($timestamp !== false) {
+            return date('Y-m-d', $timestamp);
+        }
+
+        return null;
+    }
+
     public function beforeFilter(\Cake\Event\EventInterface $event): void
     {
         parent::beforeFilter($event);
@@ -88,12 +151,13 @@ class ReservationsController extends AppController
             ];
         }
         if ($this->request->is('post')) {
-            $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
+            $data = $this->normalizeReservationDates($this->request->getData());
+            $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-
+            // debug($reservation->getErrors());
             $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
         }
         $this->set(compact('reservation', 'confirmedRanges'));
@@ -126,7 +190,8 @@ class ReservationsController extends AppController
             ];
         }
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
+            $data = $this->normalizeReservationDates($this->request->getData());
+            $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -202,10 +267,7 @@ class ReservationsController extends AppController
             ];
         }
         if ($this->request->is('post')) {
-            $data = $this->request->getData();
-            if (isset($data['checkin_date'])) {
-                $data['checkin_date'] = explode(' - ', $data['checkin_date'])[0] ?? null;
-            }
+            $data = $this->normalizeReservationDates($this->request->getData());
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 return $this->response

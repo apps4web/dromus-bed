@@ -61,22 +61,31 @@ window.initReservationFlatpickr = function() {
     });
     return disabled;
   }
+
+  function syncRangeDisplay(selectedDates) {
+    if (selectedDates.length === 2) {
+      var checkinDisplay = window.flatpickr.formatDate(selectedDates[0], 'd-m-Y');
+      var checkoutDisplay = window.flatpickr.formatDate(selectedDates[1], 'd-m-Y');
+      var checkoutValue = window.flatpickr.formatDate(selectedDates[1], 'Y-m-d');
+      checkinInput.value = checkinDisplay + ' - ' + checkoutDisplay;
+      checkoutInput.value = checkoutValue;
+    } else if (selectedDates.length === 1) {
+      checkinInput.value = window.flatpickr.formatDate(selectedDates[0], 'd-m-Y') + ' - dd-mm-jjjj';
+      checkoutInput.value = '';
+    } else {
+      checkinInput.value = '';
+      checkoutInput.value = '';
+    }
+  }
+
   window.flatpickr(checkinInput, {
     mode: 'range',
     dateFormat: 'Y-m-d',
     minDate: 'today',
     disable: getDisabledDates(confirmedRanges),
-    onChange: function(selectedDates) {
-      if (selectedDates.length === 2) {
-        var checkinStr = window.flatpickr.formatDate(selectedDates[0], 'Y-m-d');
-        var checkoutStr = window.flatpickr.formatDate(selectedDates[1], 'Y-m-d');
-        checkinInput.value = checkinStr + ' - ' + checkoutStr;
-        checkoutInput.value = checkoutStr;
-      } else if (selectedDates.length === 1) {
-        checkinInput.value = window.flatpickr.formatDate(selectedDates[0], 'Y-m-d');
-        checkoutInput.value = '';
-      }
-    }
+    onReady: syncRangeDisplay,
+    onChange: syncRangeDisplay,
+    onValueUpdate: syncRangeDisplay
   });
 };
 

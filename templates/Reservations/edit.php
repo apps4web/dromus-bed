@@ -18,6 +18,56 @@
     </aside>
     <div class="column column-80">
         <div class="reservations form content">
+            <?php
+                $normalizeDateValue = static function ($value, string $targetFormat): string {
+                    if (!$value) {
+                        return '';
+                    }
+
+                    if ($value instanceof \DateTimeInterface) {
+                        return $value->format($targetFormat);
+                    }
+
+                    $value = trim((string)$value);
+                    if ($value === '') {
+                        return '';
+                    }
+
+                    $formats = ['Y-m-d', 'd-m-Y', 'd-m-y', 'n/j/y', 'n/j/Y', 'm/d/y', 'm/d/Y'];
+                    foreach ($formats as $format) {
+                        $date = \DateTimeImmutable::createFromFormat('!' . $format, $value);
+                        if ($date !== false) {
+                            return $date->format($targetFormat);
+                        }
+                    }
+
+                    $timestamp = strtotime($value);
+                    if ($timestamp !== false) {
+                        return date($targetFormat, $timestamp);
+                    }
+
+                    return $value;
+                };
+
+                $checkinValue = '';
+                if ($reservation->checkin_date) {
+                    $checkinValue = $normalizeDateValue($reservation->checkin_date, 'd-m-Y');
+                }
+
+                $checkoutDisplayValue = '';
+                $checkoutSubmitValue = '';
+                if ($reservation->checkout_date) {
+                    $checkoutDisplayValue = $normalizeDateValue($reservation->checkout_date, 'd-m-Y');
+                    $checkoutSubmitValue = $normalizeDateValue($reservation->checkout_date, 'Y-m-d');
+                }
+
+                $displayDateRange = $checkinValue;
+                if ($checkinValue !== '' && $checkoutDisplayValue !== '') {
+                    $displayDateRange = $checkinValue . ' - ' . $checkoutDisplayValue;
+                } elseif ($checkinValue !== '') {
+                    $displayDateRange = $checkinValue . ' - dd-mm-jjjj';
+                }
+            ?>
             <?= $this->Form->create($reservation) ?>
             <fieldset>
                 <legend><?= __('Edit Reservation') ?></legend>
@@ -28,8 +78,8 @@
                 ?>
                 <div class="input date-range-group">
                     <label for="checkin_date"><?= __('Check-in / Check-out') ?></label>
-                    <input type="text" id="checkin_date" name="checkin_date" value="<?= h($reservation->checkin_date) ?>" autocomplete="off" />
-                    <input type="hidden" id="checkout_date" name="checkout_date" value="<?= h($reservation->checkout_date) ?>" />
+                    <input type="text" id="checkin_date" name="checkin_date" value="<?= h($displayDateRange) ?>" autocomplete="off" />
+                    <input type="hidden" id="checkout_date" name="checkout_date" value="<?= h($checkoutSubmitValue) ?>" />
                 </div>
                 <?php
                     echo $this->Form->control('guests');
@@ -53,8 +103,8 @@
                         ],
                         'empty' => false
                     ]);
-                    echo $this->Form->control('created_at');
-                    echo $this->Form->control('updated_at');
+                    // echo $this->Form->control('created_at');
+                    // echo $this->Form->control('updated_at');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

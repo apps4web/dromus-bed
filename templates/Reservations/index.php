@@ -5,11 +5,13 @@
  */
 ?>
 <div style="max-width:960px;margin:40px auto;padding:0 16px;">
-<div class="reservations index content">
     <?= $this->Html->link(__('New Reservation'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <?= $this->Html->link(__('Agenda'), ['action' => 'agenda'], ['class' => 'button float-right', 'style' => 'margin-right:0.5em']) ?>
-    <h3><?= __('Reservations') ?></h3>
 
+    <h1 style="margin:0 0 12px 0;">Reservations</h1>
+    <p style="margin:0 0 18px 0;"><?= $this->Html->link('Terug naar dashboard', ['controller' => 'Admin', 'action' => 'dashboard'], ['style' => 'color:#1f2937;']) ?></p>
+
+<div class="reservations index content">
     <div class="filter-form" style="margin-bottom:2em;">
         <?= $this->Form->create(null, ['type' => 'get']) ?>
         <div style="display:flex; flex-wrap:wrap; gap:1em; align-items:flex-end;">
@@ -52,8 +54,7 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('full_name') ?></th>
                     <!-- Removed email and phone columns -->
-                    <th><?= $this->Paginator->sort('checkin_date') ?></th>
-                    <th><?= $this->Paginator->sort('checkout_date') ?></th>
+                    <th><?= $this->Paginator->sort('checkin_date', 'Verblijf') ?></th>
                     <th><?= $this->Paginator->sort('guests') ?></th>
                     <th><?= $this->Paginator->sort('status') ?></th>
                     <!-- Removed source column -->
@@ -68,8 +69,17 @@
                     <td><?= $this->Number->format($reservation->id) ?></td>
                     <td><?= h($reservation->full_name) ?></td>
                     <!-- Removed email and phone columns -->
-                    <td><?= h($reservation->checkin_date) ?></td>
-                    <td><?= h($reservation->checkout_date) ?></td>
+                    <td>
+                        <?php
+                            $checkin = $reservation->checkin_date;
+                            $checkout = $reservation->checkout_date;
+
+                            $checkinText = $checkin instanceof \DateTimeInterface ? $checkin->format('d-m-Y') : h((string)$checkin);
+                            $checkoutText = $checkout instanceof \DateTimeInterface ? $checkout->format('d-m-Y') : h((string)$checkout);
+
+                            echo $checkinText . ' - ' . $checkoutText;
+                        ?>
+                    </td>
                     <td><?= $this->Number->format($reservation->guests) ?></td>
                     <td><?= h($reservation->status) ?></td>
                     <!-- Removed source column -->
