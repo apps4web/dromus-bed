@@ -62,7 +62,20 @@ class HomeController extends AppController
             ->orderBy(['sort_order' => 'ASC', 'id' => 'ASC'])
             ->all();
 
-        $this->set(compact('texts', 'photosBySection', 'reviews'));
+        // Get confirmed reservation date ranges for homepage date picker
+        $confirmed = $this->fetchTable('Reservations')
+            ->find()
+            ->select(['checkin_date', 'checkout_date'])
+            ->where(['status' => 'confirmed'])
+            ->all();
+        $confirmedRanges = [];
+        foreach ($confirmed as $r) {
+            $confirmedRanges[] = [
+                $r->checkin_date,
+                $r->checkout_date
+            ];
+        }
+        $this->set(compact('texts', 'photosBySection', 'reviews', 'confirmedRanges'));
     }
 
     public function reserve(): Response

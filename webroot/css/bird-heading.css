@@ -1,0 +1,40 @@
+/* Bird Heading Animation Styles for Dromus Bed & Boetiek */
+.bird-heading-target {
+  position: relative;
+  display: inline-block;
+  padding-inline: 0.9rem;
+}
+.heading-bird {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 33px;
+  height: 33px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  transition: transform 2200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
+  will-change: transform;
+}
+.heading-bird.is-flying {
+  animation: bird-flap 850ms ease-in-out infinite alternate;
+}
+.heading-bird.is-flying.is-landed {
+  animation-play-state: paused;
+}
+@keyframes bird-flap {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.08;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heading-bird {
+    transition: none;
+    animation: none;
+  }
+}

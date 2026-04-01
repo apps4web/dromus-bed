@@ -50,6 +50,7 @@ return function (RouteBuilder $routes): void {
     $routes->setRouteClass(DashedRoute::class);
 
     $routes->scope('/', function (RouteBuilder $builder): void {
+            $builder->connect('/reservations/ajax-add', ['controller' => 'Reservations', 'action' => 'ajaxAdd']);
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file
@@ -58,8 +59,8 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/', ['controller' => 'Home', 'action' => 'index']);
         $builder->connect('/admin', ['controller' => 'Admin', 'action' => 'dashboard']);
         $builder->connect('/admin/users', ['controller' => 'Admin', 'action' => 'users']);
-        $builder->connect('/admin/reservations', ['controller' => 'Admin', 'action' => 'reservations']);
-        $builder->connect('/admin/reservations/{id}/status', ['controller' => 'Admin', 'action' => 'updateReservationStatus', '_method' => 'POST'], ['id' => '\\d+']);
+        $builder->connect('/admin/reservations', ['controller' => 'Reservations', 'action' => 'index']);
+        $builder->connect('/admin/reservations/{id}/status', ['controller' => 'Reservations', 'action' => 'updateStatus', '_method' => 'POST'], ['id' => '\\d+']);
         $builder->connect('/admin/texts', ['controller' => 'Admin', 'action' => 'texts']);
         $builder->connect('/admin/texts/{id}/edit', ['controller' => 'Admin', 'action' => 'editText'], ['id' => '\\d+']);
         $builder->connect('/admin/photos', ['controller' => 'Admin', 'action' => 'photos']);

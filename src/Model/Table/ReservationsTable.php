@@ -72,4 +72,25 @@ class ReservationsTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Returns an array of confirmed reservation date ranges
+     * @return array<int, array{0: string, 1: string}>
+     */
+    public function getConfirmedRanges(): array
+    {
+        $results = $this->find()
+            ->select(['checkin_date', 'checkout_date'])
+            ->where(['status' => 'confirmed'])
+            ->all();
+
+        $ranges = [];
+        foreach ($results as $r) {
+            $ranges[] = [
+                $r->checkin_date,
+                $r->checkout_date
+            ];
+        }
+        return $ranges;
+    }
 }

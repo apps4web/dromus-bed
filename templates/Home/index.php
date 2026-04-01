@@ -23,17 +23,33 @@ $assetUrl = function (?string $url): string {
 $logo = $photosBySection['branding'][1]->image_url ?? 'img/Musje.png';
 $logoUrl = $assetUrl((string)$logo);
 
-$heroSlides = $photosBySection['home_slider'] ?? [];
-if (!$heroSlides) {
-    $heroSlides = [
-        (object)['image_url' => 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1600&q=80'],
-        (object)['image_url' => 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80'],
-        (object)['image_url' => 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=80'],
-    ];
+$heroSlides = [
+  (object)['image_url' => 'img/photos/dromus-gallery-landscape-01.jpg'],
+  (object)['image_url' => 'img/photos/dromus-room-ambience.jpg'],
+  (object)['image_url' => 'img/photos/dromus-hero-facade.jpg'],
+];
+
+$aboutGallery = $photosBySection['about_gallery'] ?? [];
+if (!$aboutGallery) {
+  $aboutGallery = [
+    (object)['image_url' => 'img/photos/dromus-boutique-decor.jpg', 'alt_text' => 'Sfeervol interieur met handgemaakte decoratie'],
+    (object)['image_url' => 'img/photos/dromus-boutique-products.jpg', 'alt_text' => 'Handgemaakte producten in de boetiek'],
+    (object)['image_url' => 'img/photos/dromus-breakfast-table.jpg', 'alt_text' => 'Ontbijtmoment in een gezellige setting'],
+  ];
 }
 
-$roomMain = $photosBySection['room_main'][0] ?? null;
-$roomGallery = $photosBySection['room_gallery'] ?? [];
+$roomMain = (object)[
+  'image_url' => 'img/photos/dromus-boutique-decor.jpg',
+  'alt_text' => 'Sfeervol interieur met handgemaakte decoratie',
+];
+$roomGallery = [
+  (object)['image_url' => 'img/photos/dromus-gallery-portrait-03.jpg', 'alt_text' => 'Gallery portret 3'],
+  (object)['image_url' => 'img/photos/dromus-gallery-landscape-02.jpg', 'alt_text' => 'Gallery landschap 2'],
+  (object)['image_url' => 'img/photos/dromus-interior-detail.jpg', 'alt_text' => 'Interieur detail'],
+  (object)['image_url' => 'img/photos/dromus-gallery-landscape-05.jpg', 'alt_text' => 'Gallery landschap 5'],
+  (object)['image_url' => 'img/photos/dromus-room-ambience.jpg', 'alt_text' => 'Verblijf sfeer'],
+  (object)['image_url' => 'img/photos/dromus-bathroom.jpg', 'alt_text' => 'Badkamer detail'],
+];
 
 $successMessage = $this->Flash->render('flash');
 ?>
@@ -42,6 +58,8 @@ $successMessage = $this->Flash->render('flash');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
   <?php if (\Cake\Core\Configure::read('debug')): ?>
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="googlebot" content="noindex, nofollow, noarchive" />
@@ -56,52 +74,8 @@ $successMessage = $this->Flash->render('flash');
   <?= $this->Html->meta('apple-touch-icon', '/apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
   <link rel="stylesheet" href="<?= h($this->Url->webroot('dist/style.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/home-page.css')) ?>" />
-  <style>
-    .bird-heading-target {
-      position: relative;
-      display: inline-block;
-      padding-inline: 0.9rem;
-    }
-
-    .heading-bird {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 33px;
-      height: 33px;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 2;
-      transform: translate(-50%, -50%);
-      transition: transform 2200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
-      will-change: transform;
-    }
-
-    .heading-bird.is-flying {
-      animation: bird-flap 850ms ease-in-out infinite alternate;
-    }
-
-    .heading-bird.is-flying.is-landed {
-      animation-play-state: paused;
-    }
-
-    @keyframes bird-flap {
-      from {
-        scale: 1;
-      }
-      to {
-        scale: 1.08;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .heading-bird {
-        transition: none;
-        animation: none;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="<?= h($this->Url->webroot('css/gallery-modal.css')) ?>" />
+  <link rel="stylesheet" href="<?= h($this->Url->webroot('css/bird-heading.css')) ?>" />
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased" data-bird-icon-url="<?= h($this->Url->webroot('img/Musje.png')) ?>">
 
@@ -180,10 +154,128 @@ $successMessage = $this->Flash->render('flash');
       <?php if ($roomGallery): ?>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           <?php foreach ($roomGallery as $idx => $photo): ?>
-            <img src="<?= h($assetUrl((string)$photo->image_url)) ?>" alt="<?= h((string)($photo->alt_text ?: 'Foto')) ?>" class="gallery-img w-full h-48 md:h-60 object-cover rounded-xl shadow-md <?= $idx === 2 ? 'col-span-2 md:col-span-1' : '' ?>" />
+              <img src="<?= h($assetUrl((string)$photo->image_url)) ?>"
+                alt="<?= h((string)($photo->alt_text ?: 'Foto')) ?>"
+                class="gallery-img w-full h-48 md:h-60 object-cover rounded-xl shadow-md<?= $idx === 2 ? ' col-span-2 md:col-span-1' : '' ?> cursor-pointer<?= $idx >= 3 ? ' hidden md:block' : '' ?>"
+                data-gallery-idx="<?= $idx ?>" onclick="openGalleryModal(<?= $idx ?>)"
+              />
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
+
+      <!-- Gallery Modal -->
+      <div id="galleryModal" class="fixed inset-0 z-50 hidden">
+        <div id="galleryBackdrop" tabindex="-1" onclick="if(event.target===this)closeGalleryModal()"></div>
+        <div class="gallery-modal-content select-none">
+          <button id="galleryPrevBtn" class="gallery-arrow-btn left" aria-label="Vorige" onclick="galleryPrev(); event.stopPropagation();">
+            &#8592;
+          </button>
+          <img id="galleryModalImg" src="" alt="Gallery" style="max-height:80vh; max-width:90vw; object-fit:contain; background:#222; border-radius:1rem; box-shadow:0 8px 32px #0008; z-index:20;" />
+          <button id="galleryNextBtn" class="gallery-arrow-btn right" aria-label="Volgende" onclick="galleryNext(); event.stopPropagation();">
+            &#8594;
+          </button>
+          <button id="galleryClose" onclick="closeGalleryModal()" class="gallery-close-btn" aria-label="Sluiten">&times;</button>
+        </div>
+      </div>
+    </script>
+    <script>
+    // Gallery Modal Logic
+    const galleryImages = [
+      // First the grid images, in the same order
+      'img/photos/dromus-gallery-portrait-03.jpg',
+      'img/photos/dromus-gallery-landscape-02.jpg',
+      'img/photos/dromus-interior-detail.jpg',
+      'img/photos/dromus-gallery-landscape-05.jpg',
+      'img/photos/dromus-room-ambience.jpg',
+      'img/photos/dromus-bathroom.jpg',
+      // Then all other images in /webroot/img/photos, in alphabetical order, skipping those already above
+      'img/photos/dromus-bathroom.jpg',
+      'img/photos/dromus-bedroom-detail.jpg',
+      'img/photos/dromus-bedroom-full.jpg',
+      'img/photos/dromus-boutique-decor.jpg',
+      'img/photos/dromus-boutique-products.jpg',
+      'img/photos/dromus-breakfast-table.jpg',
+      'img/photos/dromus-gallery-landscape-01.jpg',
+      'img/photos/dromus-gallery-landscape-03.jpg',
+      'img/photos/dromus-gallery-landscape-04.jpg',
+      'img/photos/dromus-gallery-portrait-01.jpg',
+      'img/photos/dromus-gallery-portrait-02.jpg',
+      'img/photos/dromus-gallery-portrait-04.jpg',
+      'img/photos/dromus-gallery-portrait-05.jpg',
+      'img/photos/dromus-gallery-portrait-06.jpg',
+      'img/photos/dromus-gallery-portrait-07.jpg',
+      'img/photos/dromus-gallery-portrait-08.jpg',
+      'img/photos/dromus-gallery-portrait-09.jpg',
+      'img/photos/dromus-gallery-portrait-10.jpg',
+      'img/photos/dromus-hero-bedroom.jpg',
+      'img/photos/dromus-hero-facade.jpg',
+      'img/photos/dromus-hero-interior.jpg',
+      'img/photos/dromus-sitting-area.jpg',
+    ].filter((v, i, a) => a.indexOf(v) === i); // Remove duplicates
+    let galleryCurrent = 0;
+    // Open modal with correct image
+    function openGalleryModal(idx) {
+      galleryCurrent = idx;
+      showGalleryImg(galleryCurrent);
+      document.getElementById('galleryModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      // Focus for accessibility
+      setTimeout(() => {
+        document.getElementById('galleryBackdrop').focus();
+      }, 10);
+    }
+    function closeGalleryModal() {
+      document.getElementById('galleryModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+    function showGalleryImg(idx) {
+      galleryCurrent = idx;
+      const img = document.getElementById('galleryModalImg');
+      img.src = galleryImages[galleryCurrent];
+    }
+    function galleryPrev() {
+      galleryCurrent = (galleryCurrent - 1 + galleryImages.length) % galleryImages.length;
+      showGalleryImg(galleryCurrent);
+    }
+    function galleryNext() {
+      galleryCurrent = (galleryCurrent + 1) % galleryImages.length;
+      showGalleryImg(galleryCurrent);
+    }
+    // Clickable left/right halves for navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      const left = document.getElementById('galleryLeft');
+      const right = document.getElementById('galleryRight');
+      if (left) left.onclick = function(e) { e.stopPropagation(); galleryPrev(); };
+      if (right) right.onclick = function(e) { e.stopPropagation(); galleryNext(); };
+      // Backdrop closes modal (only if not clicking on nav/image/close)
+      const backdrop = document.getElementById('galleryBackdrop');
+      if (backdrop) {
+        backdrop.onclick = function(e) {
+          // Only close if click is not on nav, image, or close button
+          const modal = document.getElementById('galleryModal');
+          const img = document.getElementById('galleryModalImg');
+          const closeBtn = document.getElementById('galleryClose');
+          if (
+            e.target === backdrop &&
+            !left.contains(e.target) &&
+            !right.contains(e.target) &&
+            e.target !== img &&
+            e.target !== closeBtn
+          ) {
+            closeGalleryModal();
+          }
+        };
+      }
+      // Escape closes modal
+      document.addEventListener('keydown', function(e) {
+        if (!document.getElementById('galleryModal').classList.contains('hidden')) {
+          if (e.key === 'Escape') closeGalleryModal();
+          if (e.key === 'ArrowLeft') galleryPrev();
+          if (e.key === 'ArrowRight') galleryNext();
+        }
+      });
+    });
+    </script>
     </div>
   </section>
 
@@ -240,9 +332,9 @@ $successMessage = $this->Flash->render('flash');
           </a>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <img src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?w=800&q=80" alt="Sfeervol interieur met handgemaakte decoratie" class="gallery-img w-full h-44 md:h-52 object-cover rounded-2xl shadow-md" />
-          <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=800&q=80" alt="Handgemaakte producten in de boetiek" class="gallery-img w-full h-44 md:h-52 object-cover rounded-2xl shadow-md" />
-          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80" alt="Ontbijtmoment in een gezellige setting" class="gallery-img col-span-2 w-full h-52 md:h-64 object-cover rounded-2xl shadow-md" />
+          <?php foreach (array_slice($aboutGallery, 0, 3) as $idx => $photo): ?>
+            <img src="<?= h($assetUrl((string)$photo->image_url)) ?>" alt="<?= h((string)($photo->alt_text ?: 'Sfeerfoto')) ?>" class="gallery-img <?= $idx === 2 ? 'col-span-2 w-full h-52 md:h-64' : 'w-full h-44 md:h-52' ?> object-cover rounded-2xl shadow-md" />
+          <?php endforeach; ?>
         </div>
       </div>
     </div>
@@ -262,6 +354,7 @@ $successMessage = $this->Flash->render('flash');
     </div>
   </section>
 
+
   <section id="reservation" class="py-24 px-6 lg:px-20 bg-sand-light">
     <div class="max-w-3xl mx-auto">
       <div class="text-center mb-14">
@@ -270,57 +363,73 @@ $successMessage = $this->Flash->render('flash');
         <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
         <p class="text-stone-500 text-sm"><?= h($text($texts, 'reservation.intro', 'Vul het formulier in en wij nemen binnen 24 uur contact met u op om uw reservering te bevestigen.')) ?></p>
       </div>
-
-      <?php if ($successMessage): ?>
-        <div class="mb-6 bg-olive/10 border border-olive/30 text-olive rounded-xl px-5 py-4 text-sm text-center"><?= $successMessage ?></div>
-      <?php endif; ?>
-
-      <form id="reservationForm" method="post" action="/reservations" class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
-        <input type="hidden" name="_csrfToken" value="<?= h((string)$this->request->getAttribute('csrfToken')) ?>" />
-
-        <div class="grid md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label for="name" class="block text-sm font-medium text-stone-700 mb-1.5">Naam <span class="text-red-400">*</span></label>
-            <input id="name" name="name" type="text" required class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium text-stone-700 mb-1.5">E-mailadres <span class="text-red-400">*</span></label>
-            <input id="email" name="email" type="email" required class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
-          </div>
-        </div>
-
-        <div class="mb-6">
-          <label for="phone" class="block text-sm font-medium text-stone-700 mb-1.5">Telefoonnummer</label>
-          <input id="phone" name="phone" type="tel" class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label for="checkin" class="block text-sm font-medium text-stone-700 mb-1.5">Aankomst <span class="text-red-400">*</span></label>
-            <input id="checkin" name="checkin" type="date" required class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
-          </div>
-          <div>
-            <label for="checkout" class="block text-sm font-medium text-stone-700 mb-1.5">Vertrek <span class="text-red-400">*</span></label>
-            <input id="checkout" name="checkout" type="date" required class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition" />
-          </div>
-        </div>
-
-        <div class="mb-6">
-          <label for="guests" class="block text-sm font-medium text-stone-700 mb-1.5">Aantal gasten <span class="text-red-400">*</span></label>
-          <select id="guests" name="guests" required class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition appearance-none">
-            <option value="" disabled selected>Selecteer</option>
-            <option value="1">1 persoon</option>
-            <option value="2">2 personen</option>
-          </select>
-        </div>
-
-        <div class="mb-8">
-          <label for="message" class="block text-sm font-medium text-stone-700 mb-1.5">Opmerkingen</label>
-          <textarea id="message" name="message" rows="4" class="form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition resize-none"></textarea>
-        </div>
-
-        <button type="submit" class="w-full bg-olive hover:bg-olive-dark text-white py-4 rounded-xl font-semibold text-sm uppercase tracking-wider transition-colors shadow-md"><?= h($text($texts, 'reservation.submit_label', 'Verzend aanvraag')) ?></button>
-      </form>
+      <div id="reservationFormContainer">
+        <div style="text-align:center;padding:2em;" id="reservationFormLoader">Formulier laden...</div>
+      </div>
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var container = document.getElementById('reservationFormContainer');
+        var loader = document.getElementById('reservationFormLoader');
+        fetch('<?= $this->Url->build(["controller" => "Reservations", "action" => "ajaxAdd"]) ?>', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function(response) { return response.text(); })
+        .then(function(html) {
+          container.innerHTML = html;
+          // Wait for DOM update, then initialize flatpickr
+          setTimeout(function() {
+            if (typeof window.confirmedReservationRanges === 'undefined') {
+              var script = container.querySelector('script');
+              if (script && script.textContent.includes('window.confirmedReservationRanges')) {
+                eval(script.textContent);
+              }
+            }
+            if (typeof window.initReservationFlatpickr === 'function') {
+              window.initReservationFlatpickr();
+            } else {
+              // Inline here for robustness
+              var confirmedRanges = window.confirmedReservationRanges || [];
+              var checkinInput = document.getElementById('checkin');
+              var checkoutInput = document.getElementById('checkout');
+              if (!checkinInput || !checkoutInput || !window.flatpickr) return;
+              checkinInput.setAttribute('readonly', 'readonly');
+              checkoutInput.setAttribute('readonly', 'readonly');
+              function getDisabledDates(ranges) {
+                var disabled = [];
+                ranges.forEach(function(range) {
+                  var start = new Date(range[0]);
+                  var end = new Date(range[1]);
+                  for (var d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                    disabled.push(d.toISOString().slice(0, 10));
+                  }
+                });
+                return disabled;
+              }
+              window.flatpickr(checkinInput, {
+                mode: 'range',
+                dateFormat: 'Y-m-d',
+                minDate: 'today',
+                disable: getDisabledDates(confirmedRanges),
+                onChange: function(selectedDates) {
+                  if (selectedDates.length === 2) {
+                    var checkinStr = window.flatpickr.formatDate(selectedDates[0], 'Y-m-d');
+                    var checkoutStr = window.flatpickr.formatDate(selectedDates[1], 'Y-m-d');
+                    checkinInput.value = checkinStr + ' - ' + checkoutStr;
+                    checkoutInput.value = checkoutStr;
+                  } else if (selectedDates.length === 1) {
+                    checkinInput.value = window.flatpickr.formatDate(selectedDates[0], 'Y-m-d');
+                    checkoutInput.value = '';
+                  }
+                }
+              });
+            }
+          }, 0);
+        })
+        .catch(function() {
+          loader.textContent = 'Kon het formulier niet laden.';
+        });
+      });
+      </script>
     </div>
   </section>
 
@@ -363,6 +472,8 @@ $successMessage = $this->Flash->render('flash');
           link.classList.add('hover:text-stone', 'text-white/90');
           link.classList.remove('hover:text-stone', 'text-stone-800');
         });
+        menuBtn.classList.remove('text-stone-800');
+        menuBtn.classList.add('text-white');
       } else {
         navbar.classList.remove('bg-transparent');
         navbar.classList.add('bg-white', 'shadow-md', 'backdrop-blur-sm');
@@ -372,6 +483,8 @@ $successMessage = $this->Flash->render('flash');
           link.classList.remove('hover:text-stone', 'text-white/90');
           link.classList.add('hover:text-stone', 'text-stone-800');
         });
+        menuBtn.classList.remove('text-white');
+        menuBtn.classList.add('text-stone-800');
       }
     }
 

@@ -61,16 +61,21 @@ INSERT INTO site_photos (section_key, title, alt_text, image_url, sort_order, is
 VALUES
   ('branding', 'Dromus logo', 'DROMUS Bed & Boetiek logo', 'img/dromus-logo.jpg', 1, 1),
 
-  ('home_slider', 'Hero slide 1', 'Slaapkamer sfeerbeeld', 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1600&q=80', 1, 1),
-  ('home_slider', 'Hero slide 2', 'Kamer interieur', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80', 2, 1),
-  ('home_slider', 'Hero slide 3', 'Hotelkamer detail', 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=80', 3, 1),
-  ('home_slider', 'Hero slide 4', 'Zithoek en lichtinval', 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1600&q=80', 4, 1),
+  ('home_slider', 'Hero slide 1', 'Slaapkamer sfeerbeeld', 'img/photos/dromus-hero-bedroom.jpg', 1, 1),
+  ('home_slider', 'Hero slide 2', 'Kamer interieur', 'img/photos/dromus-hero-facade.jpg', 2, 1),
+  ('home_slider', 'Hero slide 3', 'Hotelkamer detail', 'img/photos/dromus-hero-interior.jpg', 3, 1),
 
-  ('room_main', 'Gastenverblijf overzicht', 'Gastenverblijf overzicht', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80', 1, 1),
+  ('room_main', 'Gastenverblijf overzicht', 'Gastenverblijf overzicht', 'img/photos/dromus-bedroom-full.jpg', 1, 1),
 
-  ('room_gallery', 'Slaapkamer detail', 'Slaapkamer detail', 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=700&q=80', 1, 1),
-  ('room_gallery', 'Badkamer', 'Badkamer', 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=700&q=80', 2, 1),
-  ('room_gallery', 'Zithoek', 'Zithoek', 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&q=80', 3, 1);
+  ('room_gallery', 'Slaapkamer detail', 'Slaapgedeelte', 'img/photos/dromus-bedroom-detail.jpg', 1, 1),
+  ('room_gallery', 'Zithoek', 'Zithoek', 'img/photos/dromus-sitting-area.jpg', 2, 1),
+  ('room_gallery', 'Badkamer', 'Badkamer detail', 'img/photos/dromus-bathroom.jpg', 3, 1),
+  ('room_gallery', 'Interieur detail', 'Interieur detail', 'img/photos/dromus-interior-detail.jpg', 4, 1),
+  ('room_gallery', 'Verblijf sfeer', 'Verblijf sfeer', 'img/photos/dromus-room-ambience.jpg', 5, 1),
+
+  ('about_gallery', 'Boutique decor', 'Sfeervol interieur met handgemaakte decoratie', 'img/photos/dromus-boutique-decor.jpg', 1, 1),
+  ('about_gallery', 'Boutique producten', 'Handgemaakte producten in de boetiek', 'img/photos/dromus-boutique-products.jpg', 2, 1),
+  ('about_gallery', 'Ontbijtmoment', 'Ontbijtmoment in een gezellige setting', 'img/photos/dromus-breakfast-table.jpg', 3, 1);
 
 -- -----------------------------------------------------------------------------
 -- REVIEWS
