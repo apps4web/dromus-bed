@@ -120,10 +120,10 @@ $successMessage = $this->Flash->render('flash');
       <a href="#room" class="inline-block bg-olive text-white px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-lg"><?= h($text($texts, 'hero.cta_label', 'Ontdek de kamer')) ?></a>
     </div>
 
-    <button id="prevBtn" onclick="changeSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-sm transition-colors" aria-label="Vorige">
+    <button id="prevBtn" onclick="changeSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 hidden md:flex items-center justify-center backdrop-blur-sm transition-colors" aria-label="Vorige">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button id="nextBtn" onclick="changeSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-sm transition-colors" aria-label="Volgende">
+    <button id="nextBtn" onclick="changeSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white rounded-full w-10 h-10 hidden md:flex items-center justify-center backdrop-blur-sm transition-colors" aria-label="Volgende">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
     </button>
 
@@ -472,6 +472,10 @@ $successMessage = $this->Flash->render('flash');
     const homeSection = document.getElementById('home');
     const menuNav = document.getElementById('menu-items');
     const menuLinks = menuNav.querySelectorAll('a');
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIconOpen = document.getElementById('menuIconOpen');
+    const menuIconClose = document.getElementById('menuIconClose');
     function updateNavbarState() {
       const homeBottom = homeSection ? homeSection.offsetTop + homeSection.offsetHeight : 0;
       const isInHome = window.scrollY + navbar.offsetHeight < homeBottom;
@@ -502,11 +506,6 @@ $successMessage = $this->Flash->render('flash');
 
     window.addEventListener('scroll', updateNavbarState);
     updateNavbarState();
-
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuIconOpen = document.getElementById('menuIconOpen');
-    const menuIconClose = document.getElementById('menuIconClose');
 
     menuBtn.addEventListener('click', () => {
       const isOpen = !mobileMenu.classList.contains('hidden');

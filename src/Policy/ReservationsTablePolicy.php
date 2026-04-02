@@ -14,7 +14,7 @@ class ReservationsTablePolicy
         // Only show non-archived reservations, order by checkin_date desc, id desc
         return $query
             ->where(['status !=' => 'archived'])
-            ->order(['checkin_date' => 'DESC', 'id' => 'DESC']);
+            ->orderBy(['checkin_date' => 'DESC', 'id' => 'DESC']);
     }
 
     /**
