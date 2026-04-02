@@ -326,7 +326,7 @@ $successMessage = $this->Flash->render('flash');
           <p>
             Zin om de collectie te ontdekken? Bezoek onze boetiekwebsite en bekijk de handgemaakte selectie online.
           </p>
-          <a href="<?= h($text($texts, 'about.boutique_url', 'https://www.dromusboetiek.nl')) ?>" target="_blank" rel="noopener noreferrer" class="boutique-link flex w-fit items-center gap-2 bg-olive text-white px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-md">
+          <a href="<?= h($text($texts, 'about.boutique_url', 'https://bunnibow.nl')) ?>" target="_blank" rel="noopener noreferrer" class="boutique-link flex w-fit items-center gap-2 bg-olive text-white px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-md">
             Naar de boetiek
             <span aria-hidden="true">-></span>
           </a>
@@ -448,14 +448,15 @@ $successMessage = $this->Flash->render('flash');
   <footer class="bg-stone-900 text-white/70 py-12 px-6 lg:px-20">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
       <div class="text-center md:text-left">
-        <p class="font-serif text-white text-lg font-semibold mb-1"><span class="brand">Dromus</span> <span class="brand-sub">Bed &amp; Boetiek</span></p>
-        <p>Uw thuis weg van huis</p>
+        <img src="<?= h($this->Url->webroot('img/dromus-logo.jpg')) ?>" alt="Dromus logo" class="rounded-full object-cover border border-white/40 mb-3 mx-auto md:mx-0" style="width: 80px; height: 80px;" />
       </div>
       <div class="text-center">
+        <p class="font-serif text-white text-lg font-semibold mb-1"><span class="brand">Dromus</span> <span class="brand-sub">Bed &amp; Boetiek</span></p>
         <p>Sint Domusstraat 8, 4301 CP Zierikzee</p>
         <p><a href="mailto:info@dromuszierikzee.nl">info@dromuszierikzee.nl</a> &nbsp;&middot;&nbsp; <a href="tel:+31624207480">+31 (0)6 24207480</a></p>
       </div>
       <div class="text-center md:text-right">
+        <p class="mb-3 font-serif italic">"Uw thuis weg van huis"</p>
         <p class="mb-1">
           <a href="#home" class="hover:text-white transition-colors">Home</a> &nbsp;&middot;&nbsp;
           <a href="#room" class="hover:text-white transition-colors">Het Verblijf</a> &nbsp;&middot;&nbsp;
