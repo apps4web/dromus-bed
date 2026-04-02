@@ -4,24 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2195fd448f244dc08904b256e4cd6761",
+    "content-hash": "39f7e1e60b05861cb8d5d7b1ee1ce3bc",
     "packages": [
         {
             "name": "cakephp/authentication",
-            "version": "3.3.5",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/authentication.git",
-                "reference": "9a12edc97de43f95eb4fecf033b623d5b17b436c"
+                "reference": "5c6afb1c6d858b25032d4d044bfecbb7ce4d6e57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/authentication/zipball/9a12edc97de43f95eb4fecf033b623d5b17b436c",
-                "reference": "9a12edc97de43f95eb4fecf033b623d5b17b436c",
+                "url": "https://api.github.com/repos/cakephp/authentication/zipball/5c6afb1c6d858b25032d4d044bfecbb7ce4d6e57",
+                "reference": "5c6afb1c6d858b25032d4d044bfecbb7ce4d6e57",
                 "shasum": ""
             },
             "require": {
                 "cakephp/http": "^5.0",
+                "cakephp/utility": "^5.0",
                 "laminas/laminas-diactoros": "^3.0",
                 "php": ">=8.1",
                 "psr/http-client": "^1.0",
@@ -32,7 +33,7 @@
             "require-dev": {
                 "cakephp/cakephp": "^5.1.0",
                 "cakephp/cakephp-codesniffer": "^5.0",
-                "firebase/php-jwt": "^6.2",
+                "firebase/php-jwt": "^7.0",
                 "phpunit/phpunit": "^10.5.58 || ^11.5.3 || ^12.4"
             },
             "suggest": {
@@ -67,12 +68,12 @@
                 "middleware"
             ],
             "support": {
-                "docs": "https://book.cakephp.org/authentication/3/en/",
+                "docs": "https://book.cakephp.org/authentication/4/en/",
                 "forum": "https://discourse.cakephp.org/",
                 "issues": "https://github.com/cakephp/authentication/issues",
                 "source": "https://github.com/cakephp/authentication"
             },
-            "time": "2026-01-31T00:28:31+00:00"
+            "time": "2026-02-27T02:57:39+00:00"
         },
         {
             "name": "cakephp/authorization",
@@ -262,16 +263,16 @@
         },
         {
             "name": "cakephp/chronos",
-            "version": "3.3.3",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/chronos.git",
-                "reference": "960e7ecd5709fc186309b0733a18beecb37fd37e"
+                "reference": "608bbc32c59f74a0ea3358c20436c8dd94536e7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/chronos/zipball/960e7ecd5709fc186309b0733a18beecb37fd37e",
-                "reference": "960e7ecd5709fc186309b0733a18beecb37fd37e",
+                "url": "https://api.github.com/repos/cakephp/chronos/zipball/608bbc32c59f74a0ea3358c20436c8dd94536e7c",
+                "reference": "608bbc32c59f74a0ea3358c20436c8dd94536e7c",
                 "shasum": ""
             },
             "require": {
@@ -317,7 +318,7 @@
                 "issues": "https://github.com/cakephp/chronos/issues",
                 "source": "https://github.com/cakephp/chronos"
             },
-            "time": "2026-03-14T17:03:37+00:00"
+            "time": "2026-03-25T23:05:15+00:00"
         },
         {
             "name": "cakephp/migrations",
@@ -431,16 +432,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.5.10",
+            "version": "1.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63"
+                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/961a5e4056dd2e4a2eedcac7576075947c28bf63",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
+                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
                 "shasum": ""
             },
             "require": {
@@ -487,7 +488,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.10"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.11"
             },
             "funding": [
                 {
@@ -499,7 +500,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-08T15:06:51+00:00"
+            "time": "2026-03-30T09:16:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -6240,5 +6241,5 @@
         "php": ">=8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
