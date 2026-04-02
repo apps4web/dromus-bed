@@ -1,0 +1,87 @@
+/* Ensure gallery modal backdrop is always visible and covers the viewport */
+#galleryBackdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.8);
+  z-index: 10;
+  display: block;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+
+/* Modal content above backdrop */
+.gallery-modal-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Ensure modal controls are clickable */
+.gallery-modal-content > * {
+  pointer-events: auto;
+}
+/* Gallery Modal Styles for Dromus Bed & Boetiek */
+.gallery-nav-area {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 50vw;
+  height: 100vh;
+  z-index: 25;
+  background: rgba(0,0,0,0);
+  transition: background 0.2s;
+}
+.gallery-nav-area.left { left: 0; cursor: w-resize; }
+.gallery-nav-area.right { right: 0; cursor: e-resize; }
+.gallery-nav-area:hover { background: rgba(0,0,0,0.08); }
+.gallery-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s;
+  box-shadow: none;
+}
+.gallery-arrow-btn.left { left: 2.2rem; }
+.gallery-arrow-btn.right { right: 2.2rem; }
+.gallery-arrow-btn:hover {
+  color: #ffe082;
+}
+.gallery-close-btn {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  z-index: 50;
+  background: transparent;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: color 0.2s;
+}
+.gallery-close-btn:hover {
+  color: #ffe082;
+}

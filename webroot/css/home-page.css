@@ -1,0 +1,135 @@
+@font-face {
+    font-family: 'SofaSansHand';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../font/FaceType - SofaSansHand-Bk.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Chauncy Snowman';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../font/Chauncy Snowman.ttf') format('truetype');
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.slide {
+    transition: opacity 0.8s ease;
+}
+
+.gallery-img {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.gallery-img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+.review-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.10);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #b5607a;
+    box-shadow: 0 0 0 3px rgba(181, 96, 122, 0.20);
+}
+
+.show-from-600 {
+    display: none !important;
+}
+
+.navbar-shell {
+    min-height: 3.5rem;
+}
+
+.nav-logo-wrap {
+    transform: translate(-50%, -15%);
+}
+
+.nav-logo-size {
+    width: 6rem;
+    height: 6rem;
+}
+
+.home-hero-title,
+.home-section-title,
+.home-location-title,
+.home-reservation-title,
+.home-about-title {
+    font-family: 'SofaSansHand', serif;
+}
+
+.home-script {
+    font-family: 'Chauncy Snowman', cursive;
+}
+
+.home-script-strong {
+    font-family: 'Chauncy Snowman', cursive;
+    font-weight: 600;
+}
+
+.brand {
+    font-family: 'SofaSansHand', serif;
+}
+
+.brand-sub {
+    font-family: 'Chauncy Snowman', cursive;
+}
+
+.hero-slide-bg {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.navbar-fixed-shell {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.boutique-link {
+    margin-top: 1rem;
+}
+
+.location-map {
+    border: 0;
+    display: block;
+}
+
+@media (min-width: 600px) {
+    .show-from-600 {
+        display: block !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-shell {
+        min-height: 4.25rem;
+    }
+
+    .nav-logo-wrap {
+        transform: translate(-50%, -25%);
+    }
+
+    .nav-logo-size {
+        width: 8rem;
+        height: 8rem;
+    }
+
+}
