@@ -51,6 +51,30 @@ Read and edit the environment specific `config/app_local.php` and set up the
 `'Datasources'` and any other configuration relevant for your application.
 Other environment agnostic settings can be changed in `config/app.php`.
 
+For the public reservation form, configure Google reCAPTCHA with these
+environment variables:
+
+```bash
+RECAPTCHA_SITE_KEY=your_public_site_key
+RECAPTCHA_SECRET_KEY=your_private_secret_key
+```
+
+When `RECAPTCHA_SITE_KEY` is set, the homepage reservation form will render the
+widget and require a completed check before submission. Server-side validation
+is enforced when both variables are configured.
+
+Reservation emails can be configured with these environment variables:
+
+```bash
+RESERVATION_NOTIFICATION_TO=info@example.com
+RESERVATION_FROM_EMAIL=info@example.com
+RESERVATION_FROM_NAME="Dromus Bed & Boetiek"
+```
+
+After a successful reservation request, the application sends one email with the
+reservation details to `RESERVATION_NOTIFICATION_TO` and one confirmation email
+to the guest.
+
 ## Layout
 
 The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS

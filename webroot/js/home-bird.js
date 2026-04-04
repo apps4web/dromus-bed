@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initHomeBird() {
   const birdIconUrl = document.body.dataset.birdIconUrl;
   if (!birdIconUrl) {
     return;
@@ -129,4 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   sections.forEach((section) => observer.observe(section));
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHomeBird, { once: true });
+} else {
+  initHomeBird();
+}

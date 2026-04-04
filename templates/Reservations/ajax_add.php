@@ -10,6 +10,7 @@
   'autocomplete' => 'off',
 ]) ?>
   <div id="reservationMessage" class="mb-6 text-center text-sm"></div>
+  <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" value="" />
   <div class="grid md:grid-cols-2 gap-6 mb-6">
     <div>
       <label for="name" class="block text-sm font-medium text-stone-700 mb-1.5">Naam <span class="text-red-400">*</span></label>
@@ -37,11 +38,100 @@
     <label for="message" class="block text-sm font-medium text-stone-700 mb-1.5">Opmerkingen</label>
     <?= $this->Form->control('message', ['id' => 'message', 'type' => 'textarea', 'rows' => 4, 'label' => false, 'class' => 'form-input w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 bg-stone-50 transition resize-none']) ?>
   </div>
+  <?php if (!empty($recaptchaSiteKey)): ?>
+    <div class="mb-8">
+      <p class="block text-sm font-medium text-stone-700 mb-3">Spamcontrole <span class="text-red-400">*</span></p>
+      <div id="reservationRecaptchaWidget" class="min-h-[78px]"></div>
+      <p id="reservationRecaptchaError" class="mt-3 hidden rounded-xl border border-red-300 bg-red-100 px-4 py-3 text-sm text-red-700">Bevestig eerst dat u geen robot bent.</p>
+    </div>
+  <?php endif; ?>
   <button type="submit" class="w-full bg-olive hover:bg-olive-dark text-white py-4 rounded-xl font-semibold text-sm uppercase tracking-wider transition-colors shadow-md">Verzend aanvraag</button>
 <?= $this->Form->end() ?>
 </div>
 <script>
 window.confirmedReservationRanges = <?= json_encode($confirmedRanges ?? []) ?>;
+window.reservationRecaptchaSiteKey = <?= json_encode($recaptchaSiteKey ?? '') ?>;
+window.reservationRecaptchaWidgetId = null;
+
+window.ensureReservationRecaptcha = function(callback) {
+  var siteKey = window.reservationRecaptchaSiteKey;
+  if (!siteKey) {
+    callback(null);
+    return;
+  }
+
+  if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+    window.grecaptcha.ready(function() {
+      callback(window.grecaptcha);
+    });
+    return;
+  }
+
+  window.__reservationRecaptchaQueue = window.__reservationRecaptchaQueue || [];
+  window.__reservationRecaptchaQueue.push(callback);
+
+  if (document.getElementById('reservationRecaptchaApi')) {
+    return;
+  }
+
+  window.__reservationRecaptchaOnLoad = function() {
+    var queued = window.__reservationRecaptchaQueue || [];
+    window.__reservationRecaptchaQueue = [];
+    queued.forEach(function(queuedCallback) {
+      window.grecaptcha.ready(function() {
+        queuedCallback(window.grecaptcha);
+      });
+    });
+  };
+
+  var script = document.createElement('script');
+  script.id = 'reservationRecaptchaApi';
+  script.src = 'https://www.google.com/recaptcha/api.js?onload=__reservationRecaptchaOnLoad&render=explicit';
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
+};
+
+window.initReservationRecaptcha = function() {
+  var siteKey = window.reservationRecaptchaSiteKey;
+  var widget = document.getElementById('reservationRecaptchaWidget');
+  var tokenInput = document.getElementById('g-recaptcha-response');
+  var error = document.getElementById('reservationRecaptchaError');
+
+  if (!siteKey || !widget) {
+    return;
+  }
+
+  window.ensureReservationRecaptcha(function(grecaptcha) {
+    if (!grecaptcha || widget.dataset.rendered === 'true') {
+      return;
+    }
+
+    window.reservationRecaptchaWidgetId = grecaptcha.render(widget, {
+      sitekey: siteKey,
+      callback: function(token) {
+        if (tokenInput) {
+          tokenInput.value = token;
+        }
+        if (error) {
+          error.classList.add('hidden');
+        }
+      },
+      'expired-callback': function() {
+        if (tokenInput) {
+          tokenInput.value = '';
+        }
+      },
+      'error-callback': function() {
+        if (tokenInput) {
+          tokenInput.value = '';
+        }
+      }
+    });
+
+    widget.dataset.rendered = 'true';
+  });
+};
 
 window.initReservationFlatpickr = function() {
   if (!window.flatpickr) return;
@@ -92,12 +182,39 @@ window.initReservationFlatpickr = function() {
 window.initReservationForm = function() {
   var form = document.getElementById('reservationForm');
   if (!form) return;
+  window.initReservationRecaptcha();
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     var formData = new FormData(form);
     var messageDiv = document.getElementById('reservationMessage');
+    var recaptchaError = document.getElementById('reservationRecaptchaError');
+    var tokenInput = document.getElementById('g-recaptcha-response');
     messageDiv.textContent = '';
     messageDiv.className = 'mb-6 text-center text-sm';
+
+    if (window.reservationRecaptchaSiteKey) {
+      if (!window.grecaptcha || window.reservationRecaptchaWidgetId === null) {
+        if (recaptchaError) {
+          recaptchaError.classList.remove('hidden');
+        }
+        return;
+      }
+
+      var token = window.grecaptcha.getResponse(window.reservationRecaptchaWidgetId);
+      if (!token) {
+        if (recaptchaError) {
+          recaptchaError.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (tokenInput) {
+        tokenInput.value = token;
+      }
+
+      formData.set('g-recaptcha-response', token);
+    }
+
     fetch(form.action, {
       method: 'POST',
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -146,11 +263,25 @@ window.initReservationForm = function() {
         }
         messageDiv.innerHTML = msg;
         messageDiv.classList.add('bg-red-100', 'border', 'border-red-300', 'text-red-700', 'rounded-xl', 'px-5', 'py-4');
+
+        if (window.grecaptcha && window.reservationRecaptchaWidgetId !== null) {
+          window.grecaptcha.reset(window.reservationRecaptchaWidgetId);
+        }
+        if (tokenInput) {
+          tokenInput.value = '';
+        }
       }
     })
     .catch(function() {
       messageDiv.textContent = 'Er is een fout opgetreden. Probeer het later opnieuw.';
       messageDiv.classList.add('bg-red-100', 'border', 'border-red-300', 'text-red-700', 'rounded-xl', 'px-5', 'py-4');
+
+      if (window.grecaptcha && window.reservationRecaptchaWidgetId !== null) {
+        window.grecaptcha.reset(window.reservationRecaptchaWidgetId);
+      }
+      if (tokenInput) {
+        tokenInput.value = '';
+      }
     });
   });
 };

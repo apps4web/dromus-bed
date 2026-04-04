@@ -82,6 +82,23 @@ return [
     ],
 
     /*
+     * Google reCAPTCHA configuration for public-facing forms.
+     *
+     * Configure these via environment variables in production.
+     */
+    'Recaptcha' => [
+        'siteKey' => env('RECAPTCHA_SITE_KEY', ''),
+        'secretKey' => env('RECAPTCHA_SECRET_KEY', ''),
+        'verifyUrl' => env('RECAPTCHA_VERIFY_URL', 'https://www.google.com/recaptcha/api/siteverify'),
+    ],
+
+    'ReservationEmail' => [
+        'notificationTo' => env('RESERVATION_NOTIFICATION_TO', 'info@dromuszierikzee.nl'),
+        'fromEmail' => env('RESERVATION_FROM_EMAIL', 'info@dromuszierikzee.nl'),
+        'fromName' => env('RESERVATION_FROM_NAME', 'Dromus Bed & Boetiek'),
+    ],
+
+    /*
      * Apply timestamps with the last modified time to static assets (js, css, images).
      * Will append a querystring parameter containing the time the file was modified.
      * This is useful for busting browser caches.

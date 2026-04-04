@@ -3,14 +3,120 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use DateTimeImmutable;
+use App\Mailer\ReservationMailer;
+use App\Model\Entity\Reservation;
+use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use Cake\Http\Client;
 use Cake\Http\Response;
+use Cake\Log\Log;
+use DateTimeImmutable;
+use Throwable;
 
 /**
  * Reservations Controller
  */
 class ReservationsController extends AppController
 {
+    /**
+     * Send reservation emails after a successful frontend submission.
+     *
+     * @param \App\Model\Entity\Reservation $reservation Saved reservation entity.
+     * @return array<string, bool>
+     */
+    private function sendReservationEmails(Reservation $reservation): array
+    {
+        $delivery = [
+            'adminSent' => false,
+            'guestSent' => false,
+        ];
+
+        try {
+            (new ReservationMailer('default'))->send('adminNotification', [$reservation]);
+            $delivery['adminSent'] = true;
+        } catch (Throwable $exception) {
+            Log::error('Failed to send reservation admin notification: ' . $exception->getMessage());
+        }
+
+        if (trim((string)$reservation->email) === '') {
+            return $delivery;
+        }
+
+        try {
+            (new ReservationMailer('default'))->send('guestConfirmation', [$reservation]);
+            $delivery['guestSent'] = true;
+        } catch (Throwable $exception) {
+            Log::error('Failed to send reservation guest confirmation: ' . $exception->getMessage());
+        }
+
+        return $delivery;
+    }
+
+    /**
+     * Read reCAPTCHA configuration.
+     *
+     * @return array<string, string>
+     */
+    private function getRecaptchaConfig(): array
+    {
+        return [
+            'siteKey' => trim((string)Configure::read('Recaptcha.siteKey', '')),
+            'secretKey' => trim((string)Configure::read('Recaptcha.secretKey', '')),
+            'verifyUrl' => trim((string)Configure::read(
+                'Recaptcha.verifyUrl',
+                'https://www.google.com/recaptcha/api/siteverify'
+            )),
+        ];
+    }
+
+    /**
+     * Check whether reCAPTCHA should be enforced.
+     */
+    private function isRecaptchaEnabled(): bool
+    {
+        return $this->getRecaptchaConfig()['siteKey'] !== '';
+    }
+
+    /**
+     * Verify a submitted reCAPTCHA token with Google.
+     *
+     * @param string|null $token Browser token.
+     * @return bool
+     */
+    private function verifyRecaptchaResponse(?string $token): bool
+    {
+        if (!$this->isRecaptchaEnabled()) {
+            return true;
+        }
+
+        $token = trim((string)$token);
+        if ($token === '') {
+            return false;
+        }
+
+        $config = $this->getRecaptchaConfig();
+        if ($config['secretKey'] === '') {
+            return false;
+        }
+
+        $client = new Client([
+            'timeout' => 10,
+        ]);
+        $response = $client->post($config['verifyUrl'], [
+            'secret' => $config['secretKey'],
+            'response' => $token,
+            'remoteip' => (string)$this->request->clientIp(),
+        ]);
+
+        if (!$response->isOk()) {
+            return false;
+        }
+
+        $payload = $response->getJson();
+
+        return is_array($payload) && !empty($payload['success']);
+    }
+
     /**
      * Normalize supported incoming date formats to Y-m-d for ORM patching.
      *
@@ -73,7 +179,11 @@ class ReservationsController extends AppController
         return null;
     }
 
-    public function beforeFilter(\Cake\Event\EventInterface $event): void
+    /**
+     * @param \Cake\Event\EventInterface $event Event instance.
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated(['ajaxAdd']);
@@ -252,6 +362,7 @@ class ReservationsController extends AppController
         $this->viewBuilder()->setLayout('ajax');
         $reservation = $this->Reservations->newEmptyEntity();
         // $this->Authorization->authorize($reservation);
+        $recaptchaSiteKey = $this->getRecaptchaConfig()['siteKey'];
 
         $this->Authorization->skipAuthorization();
         // Get confirmed reservation date ranges
@@ -267,17 +378,36 @@ class ReservationsController extends AppController
             ];
         }
         if ($this->request->is('post')) {
+            if (!$this->verifyRecaptchaResponse($this->request->getData('g-recaptcha-response'))) {
+                return $this->response
+                    ->withType('application/json')
+                    ->withStringBody((string)json_encode([
+                        'success' => false,
+                        'message' => __('Bevestig eerst dat u geen robot bent.'),
+                        'errors' => [
+                            'recaptcha' => [
+                                'validation' => __('De reCAPTCHA-validatie is mislukt.'),
+                            ],
+                        ],
+                    ]));
+            }
+
             $data = $this->normalizeReservationDates($this->request->getData());
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
+                $mailDelivery = $this->sendReservationEmails($reservation);
+                $successMessage = $mailDelivery['guestSent']
+                    ? __('Bedankt! We hebben uw aanvraag ontvangen en een bevestigingsmail verstuurd.')
+                    : __('Bedankt! We hebben uw aanvraag ontvangen en nemen zo snel mogelijk contact met u op.');
+
                 return $this->response
                     ->withType('application/json')
                     ->withStringBody((string)json_encode([
                         'success' => true,
-                        'message' => __('Bedankt! We nemen zo snel mogelijk contact met u op.'),
+                        'message' => $successMessage,
                     ]));
             }
-            $debug = (bool)\Cake\Core\Configure::read('debug');
+            $debug = (bool)Configure::read('debug');
             $errors = $debug ? $reservation->getErrors() : null;
 
             return $this->response
@@ -289,7 +419,7 @@ class ReservationsController extends AppController
                 ]));
         }
         $csrfToken = $this->request->getAttribute('csrfToken');
-        $this->set(compact('reservation','confirmedRanges', 'csrfToken'));
+        $this->set(compact('reservation', 'confirmedRanges', 'csrfToken', 'recaptchaSiteKey'));
         $this->render('ajax_add');
 
         return null;
