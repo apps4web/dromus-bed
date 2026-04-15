@@ -308,26 +308,24 @@ $successMessage = $this->Flash->render('flash');
   <section id="about" class="py-24 px-6 lg:px-20 bg-stone-50">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
-        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3">Over ons</p>
-        <h2 class="home-about-title text-4xl md:text-5xl text-stone-800 mb-5">Bed en boetiek in een</h2>
+        <p class="text-olive uppercase tracking-widest text-sm font-medium mb-3"><?= h($text($texts, 'about.eyebrow', 'Over ons')) ?></p>
+        <h2 class="home-about-title text-4xl md:text-5xl text-stone-800 mb-5"><?= h($text($texts, 'about.title', 'Bed en boetiek in een')) ?></h2>
         <div class="w-16 h-0.5 bg-sand mx-auto mb-5"></div>
         <p class="text-stone-600 max-w-3xl mx-auto leading-relaxed">
-          Bij Dromus combineren we de rust van een kleinschalig bed &amp; breakfast met de creativiteit van een boetiek vol handgemaakte items.
-          U overnacht in een warme, ruime en stijlvolle kamer en ontdekt unieke producten die met zorg en vakmanschap gemaakt zijn.
+          <?= h($text($texts, 'about.intro', 'Bij Dromus combineren we de rust van een kleinschalig bed & breakfast met de creativiteit van een boetiek vol handgemaakte items. U overnacht in een warme, ruime en stijlvolle kamer en ontdekt unieke producten die met zorg en vakmanschap gemaakt zijn.')) ?>
         </p>
       </div>
 
       <div class="grid md:grid-cols-2 gap-10 items-center mb-14">
         <div class="space-y-5 text-stone-600 leading-relaxed">
           <p>
-            Deze mix maakt een verblijf bij ons anders dan anders: persoonlijk, lokaal en inspirerend.
-            Van een zeer luxe overnachting tot een boetiek waar elk stuk een eigen verhaal heeft.
+            <?= h($text($texts, 'about.description_1', 'Deze mix maakt een verblijf bij ons anders dan anders: persoonlijk, lokaal en inspirerend. Van een zeer luxe overnachting tot een boetiek waar elk stuk een eigen verhaal heeft.')) ?>
           </p>
           <p>
-            Zin om de collectie te ontdekken? Bezoek onze boetiekwebsite en bekijk de handgemaakte selectie online.
+            <?= h($text($texts, 'about.description_2', 'Zin om de collectie te ontdekken? Bezoek onze boetiekwebsite en bekijk de handgemaakte selectie online.')) ?>
           </p>
           <a href="<?= h($text($texts, 'about.boutique_url', 'https://bunnibow.nl')) ?>" target="_blank" rel="noopener noreferrer" class="boutique-link flex w-fit items-center gap-2 bg-olive text-white px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-olive-dark transition-colors shadow-md">
-            Naar de boetiek
+            <?= h($text($texts, 'about.boutique_cta_label', 'Naar de boetiek')) ?>
             <span aria-hidden="true">-></span>
           </a>
         </div>
@@ -349,7 +347,7 @@ $successMessage = $this->Flash->render('flash');
         <p class="text-stone-500 text-sm"><?= h($text($texts, 'location.address', 'Sint Domusstraat 8, 4301 CP Zierikzee, Nederland')) ?></p>
       </div>
       <div class="rounded-2xl overflow-hidden shadow-xl">
-        <iframe title="Locatie Dromus Bed &amp; Boetiek" src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16" width="100%" height="450" class="location-map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe title="<?= h($text($texts, 'location.map_title', 'Locatie Dromus Bed & Boetiek')) ?>" src="https://maps.google.com/maps?q=Sint+Domusstraat+8%2C+4301+CP+Zierikzee%2C+Nederland&output=embed&z=16" width="100%" height="450" class="location-map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </section>
@@ -364,7 +362,7 @@ $successMessage = $this->Flash->render('flash');
         <p class="text-stone-500 text-sm"><?= h($text($texts, 'reservation.intro', 'Vul het formulier in en wij nemen binnen 24 uur contact met u op om uw reservering te bevestigen.')) ?></p>
       </div>
       <div id="reservationFormContainer">
-        <div style="text-align:center;padding:2em;" id="reservationFormLoader">Formulier laden...</div>
+        <div style="text-align:center;padding:2em;" id="reservationFormLoader"><?= h($text($texts, 'reservation.form_loading', 'Formulier laden...')) ?></div>
       </div>
       <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -438,7 +436,7 @@ $successMessage = $this->Flash->render('flash');
           }, 0);
         })
         .catch(function() {
-          loader.textContent = 'Kon het formulier niet laden.';
+          loader.textContent = '<?= h($text($texts, 'reservation.form_load_error', 'Kon het formulier niet laden.')) ?>';
         });
       });
       </script>
@@ -448,22 +446,22 @@ $successMessage = $this->Flash->render('flash');
   <footer class="bg-stone-900 text-white/70 py-12 px-6 lg:px-20">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
       <div class="text-center md:text-left">
-        <img src="<?= h($this->Url->webroot('img/dromus-logo.jpg')) ?>" alt="Dromus logo" class="rounded-full object-cover border border-white/40 mb-3 mx-auto md:mx-0" style="width: 80px; height: 80px;" />
+        <img src="<?= h($this->Url->webroot('img/dromus-logo.jpg')) ?>" alt="<?= h($text($texts, 'footer.logo_alt', 'Dromus logo')) ?>" class="rounded-full object-cover border border-white/40 mb-3 mx-auto md:mx-0" style="width: 80px; height: 80px;" />
       </div>
       <div class="text-center">
-        <p class="font-serif text-white text-lg font-semibold mb-1"><span class="brand">Dromus</span> <span class="brand-sub">Bed &amp; Boetiek</span></p>
-        <p>Sint Domusstraat 8, 4301 CP Zierikzee</p>
-        <p><a href="mailto:info@dromuszierikzee.nl">info@dromuszierikzee.nl</a> &nbsp;&middot;&nbsp; <a href="tel:+31624207480">+31 (0)6 24207480</a></p>
+        <p class="font-serif text-white text-lg font-semibold mb-1"><span class="brand"><?= h($text($texts, 'footer.brand_main', 'Dromus')) ?></span> <span class="brand-sub"><?= h($text($texts, 'footer.brand_sub', 'Bed & Boetiek')) ?></span></p>
+        <p><?= h($text($texts, 'footer.address_short', 'Sint Domusstraat 8, 4301 CP Zierikzee')) ?></p>
+        <p><a href="mailto:<?= h($text($texts, 'footer.contact_email', 'info@dromuszierikzee.nl')) ?>"><?= h($text($texts, 'footer.contact_email', 'info@dromuszierikzee.nl')) ?></a> &nbsp;&middot;&nbsp; <a href="tel:<?= h($text($texts, 'footer.contact_phone_uri', '+31624207480')) ?>"><?= h($text($texts, 'footer.contact_phone', '+31 (0)6 24207480')) ?></a></p>
       </div>
       <div class="text-center md:text-right">
-        <p class="mb-3 font-serif italic">"Uw thuis weg van huis"</p>
+        <p class="mb-3 font-serif italic">"<?= h($text($texts, 'brand.tagline', 'Uw thuis weg van huis')) ?>"</p>
         <p class="mb-1">
           <a href="#home" class="hover:text-white transition-colors">Home</a> &nbsp;&middot;&nbsp;
           <a href="#room" class="hover:text-white transition-colors">Het Verblijf</a> &nbsp;&middot;&nbsp;
           <a href="#about" class="hover:text-white transition-colors">Over ons</a> &nbsp;&middot;&nbsp;
           <a href="#reservation" class="hover:text-white transition-colors">Reserveren</a>
         </p>
-        <p class="text-white/40 text-xs">&copy; 2026 Dromus Bed &amp; Boetiek. Alle rechten voorbehouden.</p>
+        <p class="text-white/40 text-xs"><?= h($text($texts, 'footer.copyright', '© 2026 Dromus Bed & Boetiek. Alle rechten voorbehouden.')) ?></p>
       </div>
     </div>
   </footer>
