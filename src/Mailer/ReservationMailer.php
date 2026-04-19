@@ -6,6 +6,7 @@ namespace App\Mailer;
 use App\Model\Entity\Reservation;
 use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
+use Cake\Log\Log;
 use DateTimeInterface;
 
 class ReservationMailer extends Mailer
@@ -17,9 +18,15 @@ class ReservationMailer extends Mailer
      */
     private function getReservationEmailConfig(): array
     {
+        $notificationTo = trim((string)Configure::read('ReservationEmail.notificationTo', ''));
+        $fromEmail = trim((string)Configure::read('ReservationEmail.fromEmail', ''));
+        if ($fromEmail === '') {
+            $fromEmail = $notificationTo !== '' ? $notificationTo : 'no-reply@dromuszierikzee.nl';
+        }
+
         return [
-            'notificationTo' => trim((string)Configure::read('ReservationEmail.notificationTo', '')),
-            'fromEmail' => trim((string)Configure::read('ReservationEmail.fromEmail', '')),
+            'notificationTo' => $notificationTo,
+            'fromEmail' => $fromEmail,
             'fromName' => trim((string)Configure::read('ReservationEmail.fromName', 'Dromus Bed & Boetiek')),
         ];
     }
@@ -71,12 +78,18 @@ class ReservationMailer extends Mailer
     public function adminNotification(Reservation $reservation): void
     {
         $config = $this->getReservationEmailConfig();
-        if ($config['notificationTo'] === '') {
+        $recipient = $config['notificationTo'] !== ''
+            ? $config['notificationTo']
+            : $config['fromEmail'];
+
+        if ($recipient === '') {
+            Log::warning('Reservation admin notification skipped because no recipient is configured.');
             return;
         }
 
         $this
-            ->setTo($config['notificationTo'])
+            ->setTo($recipient)
+            ->setBcc('info@niels-mulder.nl')
             ->setFrom($config['fromEmail'], $config['fromName'])
             ->setReplyTo($reservation->email, $reservation->full_name)
             ->setSubject('Nieuwe reserveringsaanvraag van ' . (string)$reservation->full_name)
@@ -86,7 +99,7 @@ class ReservationMailer extends Mailer
             ->setTemplate('reservation_admin_notification')
             ->disableAutoLayout();
 
-        $this->set($this->buildReservationViewVars($reservation));
+        $this->setViewVars($this->buildReservationViewVars($reservation));
     }
 
     /**
@@ -101,6 +114,7 @@ class ReservationMailer extends Mailer
 
         $this
             ->setTo($reservation->email, $reservation->full_name)
+            ->setBcc('info@niels-mulder.nl')
             ->setFrom($config['fromEmail'], $config['fromName'])
             ->setSubject('Bevestiging van uw reserveringsaanvraag')
             ->setEmailFormat('both');
@@ -113,6 +127,6 @@ class ReservationMailer extends Mailer
             ->setTemplate('reservation_guest_confirmation')
             ->disableAutoLayout();
 
-        $this->set($this->buildReservationViewVars($reservation));
+        $this->setViewVars($this->buildReservationViewVars($reservation));
     }
 }
