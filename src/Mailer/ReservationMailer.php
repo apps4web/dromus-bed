@@ -97,7 +97,7 @@ class ReservationMailer extends Mailer
 
         $this->viewBuilder()
             ->setTemplate('reservation_admin_notification')
-            ->disableAutoLayout();
+            ->setLayout('default');
 
         $this->setViewVars($this->buildReservationViewVars($reservation));
     }
@@ -125,7 +125,7 @@ class ReservationMailer extends Mailer
 
         $this->viewBuilder()
             ->setTemplate('reservation_guest_confirmation')
-            ->disableAutoLayout();
+            ->setLayout('default');
 
         $this->setViewVars($this->buildReservationViewVars($reservation));
     }

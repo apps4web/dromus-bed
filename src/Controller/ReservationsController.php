@@ -31,6 +31,9 @@ class ReservationsController extends AppController
             'guestSent' => false,
         ];
 
+        $transportConfig = \Cake\Mailer\TransportFactory::getConfig('default');
+        Log::debug('SMTP transport config: ' . json_encode(array_merge($transportConfig, isset($transportConfig['password']) ? ['password' => '***'] : [])));
+
         try {
             (new ReservationMailer('default'))->send('adminNotification', [$reservation]);
             $delivery['adminSent'] = true;
