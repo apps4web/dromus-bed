@@ -86,20 +86,29 @@
                     echo $this->Form->control('message');
                     echo $this->Form->control('status', [
                         'type' => 'select',
+                        'id' => 'status',
+                        'empty' => __('Keep current status ({0})', ucfirst((string)$reservation->status)),
                         'options' => [
-                            'new' => 'New',
                             'confirmed' => 'Confirmed',
                             'cancelled' => 'Cancelled',
                         ],
-                        'empty' => 'Kies bron'
+                        'value' => '',
+                        'data-initial-status' => (string)$reservation->status,
+                    ]);
+                    echo $this->Form->control('send_status_email', [
+                        'type' => 'checkbox',
+                        'id' => 'send-status-email',
+                        'label' => __('Send status update email to visitor'),
+                        'checked' => false,
+                        'hiddenField' => false,
                     ]);
                     echo $this->Form->control('source', [
                         'type' => 'select',
                         'options' => [
-                            'AirBnB' => 'AirBnB',
-                            'Booking' => 'Booking',
-                            'Website' => 'Website',
-                            'Other' => 'Other',
+                            'airbnb' => 'AirBnB',
+                            'booking' => 'Booking',
+                            'website' => 'Website',
+                            'other' => 'Other',
                         ],
                         'empty' => false
                     ]);
@@ -114,6 +123,25 @@
             $this->Html->css('https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css', ['block' => true]);
             $this->Html->script('daterange-reservations.js', ['block' => true]);
             $this->Html->scriptBlock('window.confirmedReservationRanges = ' . json_encode($confirmedRanges) . ';', ['block' => true]);
+            $this->Html->scriptBlock(
+                "(function () {
+                    var statusField = document.getElementById('status');
+                    var sendStatusEmailField = document.getElementById('send-status-email');
+                    if (!statusField || !sendStatusEmailField) {
+                        return;
+                    }
+
+                    var initialStatus = statusField.getAttribute('data-initial-status') || '';
+                    var syncCheckboxWithStatusChange = function () {
+                        var nextStatus = statusField.value === '' ? initialStatus : statusField.value;
+                        sendStatusEmailField.checked = nextStatus !== initialStatus;
+                    };
+
+                    statusField.addEventListener('change', syncCheckboxWithStatusChange);
+                    syncCheckboxWithStatusChange();
+                })();",
+                ['block' => true]
+            );
             ?>
         </div>
     </div>

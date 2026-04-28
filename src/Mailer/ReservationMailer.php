@@ -12,6 +12,20 @@ use DateTimeInterface;
 class ReservationMailer extends Mailer
 {
     /**
+     * Convert reservation status codes into readable labels for guests.
+     */
+    private function statusLabel(string $status): string
+    {
+        $labels = [
+            'new' => 'Nieuw',
+            'confirmed' => 'Bevestigd',
+            'cancelled' => 'Geannuleerd',
+        ];
+
+        return $labels[$status] ?? ucfirst($status);
+    }
+
+    /**
      * Read reservation mail settings.
      *
      * @return array<string, string>
@@ -21,14 +35,34 @@ class ReservationMailer extends Mailer
         $notificationTo = trim((string)Configure::read('ReservationEmail.notificationTo', ''));
         $fromEmail = trim((string)Configure::read('ReservationEmail.fromEmail', ''));
         if ($fromEmail === '') {
-            $fromEmail = $notificationTo !== '' ? $notificationTo : 'no-reply@dromuszierikzee.nl';
+            $fromEmail = $notificationTo !== '' ? $notificationTo : 'info@dromuszierikzee.nl';
         }
 
         return [
             'notificationTo' => $notificationTo,
             'fromEmail' => $fromEmail,
             'fromName' => trim((string)Configure::read('ReservationEmail.fromName', 'Dromus Bed & Boetiek')),
+            'devEmail' => trim((string)Configure::read('ReservationEmail.devEmail', 'info@niels-mulder.nl')),
         ];
+    }
+
+    /**
+     * Build BCC list for guest emails: admin + developer.
+     *
+     * @param array<string, string> $config Email config from getReservationEmailConfig().
+     * @return array<int, string>
+     */
+    private function buildGuestBcc(array $config): array
+    {
+        $bcc = [];
+        if ($config['notificationTo'] !== '') {
+            $bcc[] = $config['notificationTo'];
+        }
+        if ($config['devEmail'] !== '' && $config['devEmail'] !== $config['notificationTo']) {
+            $bcc[] = $config['devEmail'];
+        }
+
+        return $bcc;
     }
 
     /**
@@ -87,13 +121,18 @@ class ReservationMailer extends Mailer
             return;
         }
 
-        $this
+        $bcc = $this->buildGuestBcc($config);
+
+        $mailer = $this
             ->setTo($recipient)
-            ->setBcc('info@niels-mulder.nl')
             ->setFrom($config['fromEmail'], $config['fromName'])
             ->setReplyTo($reservation->email, $reservation->full_name)
             ->setSubject('Nieuwe reserveringsaanvraag van ' . (string)$reservation->full_name)
             ->setEmailFormat('both');
+
+        if ($bcc !== []) {
+            $mailer->setBcc($bcc);
+        }
 
         $this->viewBuilder()
             ->setTemplate('reservation_admin_notification')
@@ -112,12 +151,17 @@ class ReservationMailer extends Mailer
     {
         $config = $this->getReservationEmailConfig();
 
-        $this
+        $bcc = $this->buildGuestBcc($config);
+
+        $mailer = $this
             ->setTo($reservation->email, $reservation->full_name)
-            ->setBcc('info@niels-mulder.nl')
             ->setFrom($config['fromEmail'], $config['fromName'])
             ->setSubject('Bevestiging van uw reserveringsaanvraag')
             ->setEmailFormat('both');
+
+        if ($bcc !== []) {
+            $mailer->setBcc($bcc);
+        }
 
         if ($config['notificationTo'] !== '') {
             $this->setReplyTo($config['notificationTo'], $config['fromName']);
@@ -128,5 +172,44 @@ class ReservationMailer extends Mailer
             ->setLayout('default');
 
         $this->setViewVars($this->buildReservationViewVars($reservation));
+    }
+
+    /**
+     * Send a guest email when reservation status changes.
+     *
+     * @param \App\Model\Entity\Reservation $reservation Reservation entity.
+     * @param string $previousStatus Previous status value.
+     * @return void
+     */
+    public function guestStatusUpdate(Reservation $reservation, string $previousStatus): void
+    {
+        $config = $this->getReservationEmailConfig();
+        $currentStatus = trim((string)$reservation->status);
+
+        $bcc = $this->buildGuestBcc($config);
+
+        $mailer = $this
+            ->setTo($reservation->email, $reservation->full_name)
+            ->setFrom($config['fromEmail'], $config['fromName'])
+            ->setSubject('Update van uw reserveringsstatus')
+            ->setEmailFormat('both');
+
+        if ($bcc !== []) {
+            $mailer->setBcc($bcc);
+        }
+
+        if ($config['notificationTo'] !== '') {
+            $this->setReplyTo($config['notificationTo'], $config['fromName']);
+        }
+
+        $this->viewBuilder()
+            ->setTemplate('reservation_guest_status_update')
+            ->setLayout('default');
+
+        $viewVars = $this->buildReservationViewVars($reservation);
+        $viewVars['previousStatus'] = $this->statusLabel(trim($previousStatus));
+        $viewVars['status'] = $this->statusLabel($currentStatus);
+
+        $this->setViewVars($viewVars);
     }
 }

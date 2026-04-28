@@ -58,8 +58,8 @@ $successMessage = $this->Flash->render('flash');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+  <title><?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?></title>
+  <meta name="description" content="Dromus Bed & Boetiek is een charmante bed & breakfast gelegen in het hart van Zierikzee, Nederland. Geniet van comfortabele accommodatie, gastvrijheid en een unieke ervaring in onze boetiek.">
   <?php if (\Cake\Core\Configure::read('debug')): ?>
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="googlebot" content="noindex, nofollow, noarchive" />
@@ -67,15 +67,24 @@ $successMessage = $this->Flash->render('flash');
     <meta name="robots" content="index, follow, archive" />
     <meta name="googlebot" content="index, follow, archive" />
   <?php endif; ?>
-  <title><?= h($text($texts, 'brand.name', 'Dromus Bed & Boetiek')) ?></title>
   <?= $this->Html->meta('icon', 'favicon.ico') ?>
   <?= $this->Html->meta('icon', 'favicon-32x32.png', ['type' => 'image/png', 'sizes' => '32x32']) ?>
   <?= $this->Html->meta('icon', 'favicon-16x16.png', ['type' => 'image/png', 'sizes' => '16x16']) ?>
   <?= $this->Html->meta('apple-touch-icon', 'apple-touch-icon.png', ['rel' => 'apple-touch-icon', 'sizes' => '180x180']) ?>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('dist/style.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/home-page.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/gallery-modal.css')) ?>" />
   <link rel="stylesheet" href="<?= h($this->Url->webroot('css/bird-heading.css')) ?>" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKGFLK6J13"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YKGFLK6J13');
+  </script>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased" data-bird-icon-url="<?= h($this->Url->webroot('img/Musje.png')) ?>">
 
