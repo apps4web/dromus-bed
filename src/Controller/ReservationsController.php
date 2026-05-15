@@ -41,16 +41,17 @@ class ReservationsController extends AppController
             Log::error('Failed to send reservation admin notification: ' . $exception->getMessage());
         }
 
-        if (trim((string)$reservation->email) === '') {
-            return $delivery;
-        }
-
-        try {
-            (new ReservationMailer('default'))->send('guestConfirmation', [$reservation]);
-            $delivery['guestSent'] = true;
-        } catch (Throwable $exception) {
-            Log::error('Failed to send reservation guest confirmation: ' . $exception->getMessage());
-        }
+        // Guest confirmation email disabled - clients will send personal emails outside the system
+        // if (trim((string)$reservation->email) === '') {
+        //     return $delivery;
+        // }
+        //
+        // try {
+        //     (new ReservationMailer('default'))->send('guestConfirmation', [$reservation]);
+        //     $delivery['guestSent'] = true;
+        // } catch (Throwable $exception) {
+        //     Log::error('Failed to send reservation guest confirmation: ' . $exception->getMessage());
+        // }
 
         return $delivery;
     }
@@ -418,6 +419,7 @@ class ReservationsController extends AppController
             }
 
             $data = $this->normalizeReservationDates($this->request->getData());
+            $data['source'] = 'website';
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 $mailDelivery = $this->sendReservationEmails($reservation);
