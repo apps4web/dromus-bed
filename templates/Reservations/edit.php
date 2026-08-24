@@ -93,7 +93,6 @@
                             'cancelled' => 'Cancelled',
                         ],
                         'value' => '',
-                        'data-initial-status' => (string)$reservation->status,
                     ]);
                     echo $this->Form->control('send_status_email', [
                         'type' => 'checkbox',
@@ -123,25 +122,6 @@
             $this->Html->css('https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css', ['block' => true]);
             $this->Html->script('daterange-reservations.js', ['block' => true]);
             $this->Html->scriptBlock('window.confirmedReservationRanges = ' . json_encode($confirmedRanges) . ';', ['block' => true]);
-            $this->Html->scriptBlock(
-                "(function () {
-                    var statusField = document.getElementById('status');
-                    var sendStatusEmailField = document.getElementById('send-status-email');
-                    if (!statusField || !sendStatusEmailField) {
-                        return;
-                    }
-
-                    var initialStatus = statusField.getAttribute('data-initial-status') || '';
-                    var syncCheckboxWithStatusChange = function () {
-                        var nextStatus = statusField.value === '' ? initialStatus : statusField.value;
-                        sendStatusEmailField.checked = nextStatus !== initialStatus;
-                    };
-
-                    statusField.addEventListener('change', syncCheckboxWithStatusChange);
-                    syncCheckboxWithStatusChange();
-                })();",
-                ['block' => true]
-            );
             ?>
         </div>
     </div>
