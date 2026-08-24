@@ -26,6 +26,7 @@ class ReservationMailer extends Mailer
 
         return [
             'notificationTo' => $notificationTo,
+            'replyTo' => trim((string)Configure::read('ReservationEmail.replyTo', '')),
             'fromEmail' => $fromEmail,
             'fromName' => trim((string)Configure::read('ReservationEmail.fromName', 'Dromus Bed & Boetiek')),
         ];
@@ -119,8 +120,9 @@ class ReservationMailer extends Mailer
             ->setSubject('Bevestiging van uw reserveringsaanvraag')
             ->setEmailFormat('both');
 
-        if ($config['notificationTo'] !== '') {
-            $this->setReplyTo($config['notificationTo'], $config['fromName']);
+        $replyTo = $config['replyTo'] !== '' ? $config['replyTo'] : $config['notificationTo'];
+        if ($replyTo !== '') {
+            $this->setReplyTo($replyTo, $config['fromName']);
         }
 
         $this->viewBuilder()

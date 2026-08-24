@@ -93,7 +93,8 @@ return [
     ],
 
     'ReservationEmail' => [
-        'notificationTo' => env('RESERVATION_NOTIFICATION_TO', 'info@dromuszierikzee.nl'),
+        'notificationTo' => env('RESERVATION_NOTIFICATION_TO', 'rene@dromuszierikzee.nl'),
+        'replyTo' => env('RESERVATION_REPLY_TO', 'rene@dromuszierikzee.nl'),
         'fromEmail' => env('RESERVATION_FROM_EMAIL', 'info@dromuszierikzee.nl'),
         'fromName' => env('RESERVATION_FROM_NAME', 'Dromus Bed & Boetiek'),
     ],
