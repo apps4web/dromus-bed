@@ -54,8 +54,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+            <?= $this->Html->link('Naar website', ['controller' => 'Home', 'action' => 'index'], ['style' => 'color:#2563eb;text-decoration:none;font-weight:500;']) ?>
+            <?= $this->Html->link('Uitloggen', ['controller' => 'Users', 'action' => 'logout'], ['style' => 'color:#dc2626;text-decoration:none;font-weight:500;']) ?>
         </div>
     </nav>
     <main class="main">

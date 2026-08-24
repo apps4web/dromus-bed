@@ -6,12 +6,10 @@ declare(strict_types=1);
     <p style="margin:0 0 20px 0;color:#57534e;">Welkom <?= h($name) ?> (<?= h($email) ?>)</p>
 
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
-        <?= $this->Html->link('Naar website', ['controller' => 'Home', 'action' => 'index'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
-        <?= $this->Html->link('Reservaties', ['controller' => 'Admin', 'action' => 'reservations'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
+        <?= $this->Html->link('Reserveringen', ['controller' => 'Admin', 'action' => 'reservations'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
         <?= $this->Html->link('Teksten', ['controller' => 'Admin', 'action' => 'texts'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
         <?= $this->Html->link('Foto\'s', ['controller' => 'Admin', 'action' => 'photos'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
         <?= $this->Html->link('Reviews', ['controller' => 'Admin', 'action' => 'reviews'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
-        <?= $this->Html->link('Uitloggen', ['controller' => 'Users', 'action' => 'logout'], ['style' => 'padding:10px 14px;border:1px solid #d6d3d1;border-radius:8px;text-decoration:none;color:#111827;']) ?>
     </div>
 
     <div style="padding:14px;border:1px solid #e7e5e4;border-radius:10px;background:#fafaf9;">

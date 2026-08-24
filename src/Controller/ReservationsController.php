@@ -41,16 +41,17 @@ class ReservationsController extends AppController
             Log::error('Failed to send reservation admin notification: ' . $exception->getMessage());
         }
 
-        if (trim((string)$reservation->email) === '') {
-            return $delivery;
-        }
-
-        try {
-            (new ReservationMailer('default'))->send('guestConfirmation', [$reservation]);
-            $delivery['guestSent'] = true;
-        } catch (Throwable $exception) {
-            Log::error('Failed to send reservation guest confirmation: ' . $exception->getMessage());
-        }
+        // Guest confirmation email disabled - clients will send personal emails outside the system
+        // if (trim((string)$reservation->email) === '') {
+        //     return $delivery;
+        // }
+        //
+        // try {
+        //     (new ReservationMailer('default'))->send('guestConfirmation', [$reservation]);
+        //     $delivery['guestSent'] = true;
+        // } catch (Throwable $exception) {
+        //     Log::error('Failed to send reservation guest confirmation: ' . $exception->getMessage());
+        // }
 
         return $delivery;
     }
@@ -265,6 +266,7 @@ class ReservationsController extends AppController
         }
         if ($this->request->is('post')) {
             $data = $this->normalizeReservationDates($this->request->getData());
+            $data['status'] = 'new';
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
@@ -304,8 +306,29 @@ class ReservationsController extends AppController
         }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->normalizeReservationDates($this->request->getData());
+            $sendStatusEmail = !empty($data['send_status_email']);
+            unset($data['send_status_email']);
+            $previousStatus = trim((string)$reservation->status);
+            if (isset($data['status']) && trim((string)$data['status']) === '') {
+                unset($data['status']);
+            }
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
+                $currentStatus = trim((string)$reservation->status);
+                if ($sendStatusEmail) {
+                    if ($previousStatus !== $currentStatus && trim((string)$reservation->email) !== '') {
+                        try {
+                            (new ReservationMailer('default'))->send('guestStatusUpdate', [$reservation, $previousStatus]);
+                        } catch (Throwable $exception) {
+                            Log::error('Failed to send reservation status update email: ' . $exception->getMessage());
+                            $this->Flash->warning(__('The reservation was saved, but the status update email could not be sent.'));
+                        }
+                    } elseif (trim((string)$reservation->email) === '') {
+                        $this->Flash->warning(__('The reservation was saved, but no visitor email address is available.'));
+                    } else {
+                        $this->Flash->warning(__('The reservation was saved, but no status change was detected so no email was sent.'));
+                    }
+                }
                 $this->Flash->success(__('The reservation has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -396,6 +419,7 @@ class ReservationsController extends AppController
             }
 
             $data = $this->normalizeReservationDates($this->request->getData());
+            $data['source'] = 'website';
             $reservation = $this->Reservations->patchEntity($reservation, $data);
             if ($this->Reservations->save($reservation)) {
                 $mailDelivery = $this->sendReservationEmails($reservation);

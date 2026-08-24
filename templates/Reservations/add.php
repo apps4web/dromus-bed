@@ -71,21 +71,13 @@
                 <?php
                     echo $this->Form->control('guests');
                     echo $this->Form->control('message');
-                    echo $this->Form->control('status', [
-                        'type' => 'select',
-                        'options' => [
-                            'new' => 'New',
-                            'confirmed' => 'Confirmed',
-                        ],
-                        'empty' => 'Kies bron'
-                    ]);
                     echo $this->Form->control('source', [
                         'type' => 'select',
                         'options' => [
-                            'AirBnB' => 'AirBnB',
-                            'Booking' => 'Booking',
-                            'Website' => 'Website',
-                            'Other' => 'Other',
+                            'airbnb' => 'AirBnB',
+                            'booking' => 'Booking',
+                            'website' => 'Website',
+                            'other' => 'Other',
                         ],
                         'empty' => false
                     ]);
